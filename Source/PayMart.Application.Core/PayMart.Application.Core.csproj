@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PayMart.Communication.Core\PayMart.Communication.Core.csproj" />
+    <ProjectReference Include="..\PayMart.Infrastructure.Core\PayMart.Infrastructure.Core.csproj" />
+  </ItemGroup>
+
 </Project>
