@@ -3,7 +3,7 @@ using PayMart.Infrastructure.Core.Services;
 
 namespace PayMart.API.Core.Controllers.Clients;
 
-[Route("api/[controller]")]
+[Route("api/")]
 [ApiController]
 public class ClientController : ControllerBase
 {
@@ -16,4 +16,16 @@ public class ClientController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("getID")]
+    public async Task<IActionResult> GetIDClient(
+    [FromServices] HttpClient request, 
+    [FromHeader] int id)
+    {
+        var response = await request.GetStringAsync(ServicesURL.Client("getID", id));
+        return Ok(response);
+    }
+
+
+
+    
 }
