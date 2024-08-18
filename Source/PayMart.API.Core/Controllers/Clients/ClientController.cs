@@ -12,7 +12,7 @@ public class ClientController : ControllerBase
     public async Task<IActionResult> GetAllClient(
         [FromServices] HttpClient request)
     {
-        var response = await request.GetStringAsync(ServicesURL.ClientUrl);
+        var response = await request.GetStringAsync(ServicesURL.Client("getAll"));
         return Ok(response);
     }
 
