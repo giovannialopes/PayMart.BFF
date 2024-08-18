@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PayMart.Infrastructure.Core.Services;
 
 namespace PayMart.API.Core.Controllers.Clients;
 
@@ -9,9 +10,9 @@ public class ClientController : ControllerBase
 
     [HttpGet("getAll")]
     public async Task<IActionResult> GetAllClient(
-        [FromServices] HttpClient httpClient)
+        [FromServices] HttpClient request)
     {
-        var response = await httpClient.GetStringAsync("https://localhost:5001/api/Client");
+        var response = await request.GetStringAsync(ServicesURL.ClientUrl);
         return Ok(response);
     }
 
