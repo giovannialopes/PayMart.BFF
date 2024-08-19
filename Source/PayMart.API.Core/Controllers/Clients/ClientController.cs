@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PayMart.Application.Core.NovaPasta;
 using PayMart.Domain.Core.NovaPasta.NovaPasta;
 using PayMart.Domain.Core.Request.Client;
 using PayMart.Infrastructure.Core.Services;
-using System.Runtime.Serialization;
-using System.Text.Json;
 
 namespace PayMart.API.Core.Controllers.Clients;
 
@@ -14,7 +11,7 @@ namespace PayMart.API.Core.Controllers.Clients;
 public class ClientController : ControllerBase
 {
 
-    [HttpGet("getAll")]
+    [HttpGet("GetAll")]
     public async Task<IActionResult> GetAllClient(
     [FromServices] HttpClient http)
     {
@@ -22,7 +19,7 @@ public class ClientController : ControllerBase
         return Ok(JsonFormatter.Formatter(response));
     }
 
-    [HttpGet("getID")]
+    [HttpGet("GetID")]
     public async Task<IActionResult> GetIDClient(
     [FromServices] HttpClient http, 
     [FromHeader] int id)
@@ -47,5 +44,20 @@ public class ClientController : ControllerBase
         return BadRequest();
     }
 
+    [HttpPut("Update")]
+    public async Task<IActionResult> UpdateClient(int id,
+    [FromServices] HttpClient http,
+    [FromBody] RequestPostClient request)
+    {
+        var httpResponse = await http.PutAsJsonAsync(ServicesURL.Client("update", id), request);
+
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var response = new ResponsePostClient { Name = request.Name, Email = request.Email, Age = request.Age };
+            return Ok(response);
+        }
+        return BadRequest();
+        
+    }
 
 }

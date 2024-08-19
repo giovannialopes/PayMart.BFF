@@ -18,6 +18,10 @@ public static class ServicesURL
         if (Url == "post")
             ClientUrl = "https://localhost:5001/api/Client/post";
 
+        if (Url == "update")
+            ClientUrl = "https://localhost:5001/api/Client/update" + $"/{Config}";
+
+
         return ClientUrl;
     }
 
