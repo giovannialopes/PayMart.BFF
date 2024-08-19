@@ -19,8 +19,14 @@ public class ClientController : ControllerBase
     public async Task<IActionResult> GetAllClient(
     [FromServices] HttpClient http)
     {
-        var response = await http.GetStringAsync(ServicesURL.Client("getAll"));
-        return Ok(JsonFormatter.Formatter(response));
+        var httpResponse = await http.GetStringAsync(ServicesURL.Client("getAll"));
+
+        if (httpResponse != null)
+        {
+            return Ok(JsonFormatter.Formatter(httpResponse));
+        }
+
+        return NoContent();
     }
 
     [HttpGet]
@@ -31,8 +37,15 @@ public class ClientController : ControllerBase
     [FromServices] HttpClient http, 
     [FromHeader] int id)
     {
-        var response = await http.GetStringAsync(ServicesURL.Client("getID", id));
-        return Ok(JsonFormatter.Formatter(response));
+        var httpResponse = await http.GetStringAsync(ServicesURL.Client("getID", id));
+
+        if (httpResponse != null)
+        {
+            return Ok(JsonFormatter.Formatter(httpResponse));
+        }
+
+        return NoContent();
+
     }
 
     [HttpPost]
@@ -69,6 +82,7 @@ public class ClientController : ControllerBase
             var response = new ResponsePostClient { Name = request.Name, Email = request.Email, Age = request.Age };
             return Ok(response);
         }
+
         return NoContent();
         
     }
