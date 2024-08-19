@@ -15,6 +15,8 @@ public static class ServicesURL
         if (Url == "getID")
             ClientUrl = "https://localhost:5001/api/Client/getID" + $"/{Config}";
 
+        if (Url == "post")
+            ClientUrl = "https://localhost:5001/api/Client/post";
 
         return ClientUrl;
     }

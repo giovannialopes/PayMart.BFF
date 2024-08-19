@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PayMart.Communication.Core\PayMart.Communication.Core.csproj" />
+    <ProjectReference Include="..\PayMart.Domain.Core\PayMart.Domain.Core.csproj" />
     <ProjectReference Include="..\PayMart.Infrastructure.Core\PayMart.Infrastructure.Core.csproj" />
   </ItemGroup>
 

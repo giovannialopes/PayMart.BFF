@@ -9,13 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{251CA96F-E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PayMart.API.Core", "Source\PayMart.API.Core\PayMart.API.Core.csproj", "{BC107C17-7C0B-497F-B748-E5E03E2D38B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayMart.Application.Core", "Source\PayMart.Application.Core\PayMart.Application.Core.csproj", "{430A0C29-4B8B-4ED8-BAD4-05A3A3D9B980}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PayMart.Application.Core", "Source\PayMart.Application.Core\PayMart.Application.Core.csproj", "{430A0C29-4B8B-4ED8-BAD4-05A3A3D9B980}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayMart.Infrastructure.Core", "Source\PayMart.Infrastructure.Core\PayMart.Infrastructure.Core.csproj", "{36C536C6-B192-485D-AD15-5DBDEC65F32F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PayMart.Infrastructure.Core", "Source\PayMart.Infrastructure.Core\PayMart.Infrastructure.Core.csproj", "{36C536C6-B192-485D-AD15-5DBDEC65F32F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayMart.Communication.Core", "Source\PayMart.Communication.Core\PayMart.Communication.Core.csproj", "{A82A5E1E-7BD0-458B-945E-0E8B8CBC1A61}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayMart.Domain.Core", "Source\PayMart.Domain.Core\PayMart.Domain.Core.csproj", "{438A4EF5-9E79-4D04-B0BB-9999D0E55A1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PayMart.Domain.Core", "Source\PayMart.Domain.Core\PayMart.Domain.Core.csproj", "{438A4EF5-9E79-4D04-B0BB-9999D0E55A1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +33,6 @@ Global
 		{36C536C6-B192-485D-AD15-5DBDEC65F32F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36C536C6-B192-485D-AD15-5DBDEC65F32F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36C536C6-B192-485D-AD15-5DBDEC65F32F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A82A5E1E-7BD0-458B-945E-0E8B8CBC1A61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A82A5E1E-7BD0-458B-945E-0E8B8CBC1A61}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A82A5E1E-7BD0-458B-945E-0E8B8CBC1A61}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A82A5E1E-7BD0-458B-945E-0E8B8CBC1A61}.Release|Any CPU.Build.0 = Release|Any CPU
 		{438A4EF5-9E79-4D04-B0BB-9999D0E55A1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{438A4EF5-9E79-4D04-B0BB-9999D0E55A1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{438A4EF5-9E79-4D04-B0BB-9999D0E55A1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,7 +45,6 @@ Global
 		{BC107C17-7C0B-497F-B748-E5E03E2D38B0} = {2C21DB5E-C72E-45D2-8E45-53357394A94C}
 		{430A0C29-4B8B-4ED8-BAD4-05A3A3D9B980} = {2C21DB5E-C72E-45D2-8E45-53357394A94C}
 		{36C536C6-B192-485D-AD15-5DBDEC65F32F} = {2C21DB5E-C72E-45D2-8E45-53357394A94C}
-		{A82A5E1E-7BD0-458B-945E-0E8B8CBC1A61} = {2C21DB5E-C72E-45D2-8E45-53357394A94C}
 		{438A4EF5-9E79-4D04-B0BB-9999D0E55A1C} = {2C21DB5E-C72E-45D2-8E45-53357394A94C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
