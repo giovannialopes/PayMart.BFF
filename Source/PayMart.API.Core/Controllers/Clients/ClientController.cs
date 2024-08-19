@@ -43,6 +43,7 @@ public class ClientController : ControllerBase
             var response = new ResponsePostClient { Name = request.Name, Email = request.Email, Age = request.Age };
             return Created("", response);
         }
+
         return BadRequest();
     }
 
