@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using PayMart.Application.Core.NovaPasta;
 using PayMart.Domain.Core.NovaPasta.NovaPasta;
 using PayMart.Domain.Core.Request.Client;
@@ -11,7 +12,10 @@ namespace PayMart.API.Core.Controllers.Clients;
 public class ClientController : ControllerBase
 {
 
-    [HttpGet("GetAll")]
+    [HttpGet]
+    [Route("GetAll")]
+    [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> GetAllClient(
     [FromServices] HttpClient http)
     {
@@ -19,7 +23,10 @@ public class ClientController : ControllerBase
         return Ok(JsonFormatter.Formatter(response));
     }
 
-    [HttpGet("GetID")]
+    [HttpGet]
+    [Route("GetID")]
+    [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> GetIDClient(
     [FromServices] HttpClient http, 
     [FromHeader] int id)
@@ -28,7 +35,10 @@ public class ClientController : ControllerBase
         return Ok(JsonFormatter.Formatter(response));
     }
 
-    [HttpPost("Post")]
+    [HttpPost]
+    [Route("Post")]
+    [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> PostClient(
     [FromServices] HttpClient http,
     [FromBody] RequestPostClient request)
@@ -41,10 +51,13 @@ public class ClientController : ControllerBase
             return Created("", response);
         }
 
-        return BadRequest();
+        return NoContent();
     }
 
-    [HttpPut("Update")]
+    [HttpPut]
+    [Route("Update")]
+    [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateClient(int id,
     [FromServices] HttpClient http,
     [FromBody] RequestPostClient request)
@@ -56,8 +69,27 @@ public class ClientController : ControllerBase
             var response = new ResponsePostClient { Name = request.Name, Email = request.Email, Age = request.Age };
             return Ok(response);
         }
-        return BadRequest();
+        return NoContent();
         
+    }
+
+    [HttpDelete]
+    [Route("Delete")]
+    [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Delete(
+    [FromServices] HttpClient http,
+    [FromHeader] int id)
+    {
+        var httpResponse = await http.DeleteAsync(ServicesURL.Client("delete", id));
+
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            return Ok();
+        }
+
+        return NoContent();
+
     }
 
 }

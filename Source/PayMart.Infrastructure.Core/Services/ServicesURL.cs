@@ -21,6 +21,8 @@ public static class ServicesURL
         if (Url == "update")
             ClientUrl = "https://localhost:5001/api/Client/update" + $"/{Config}";
 
+        if (Url == "delete")
+            ClientUrl = "https://localhost:5001/api/Client/delete" + $"/{Config}";
 
         return ClientUrl;
     }
