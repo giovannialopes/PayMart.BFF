@@ -58,7 +58,9 @@ public class ProductController : ControllerBase
 
         if (httpResponse.IsSuccessStatusCode)
         {
-            return Created("",httpResponse);
+            var response = new ReponsePostProduct { Name = request.Name, Description = request.Description, Price = request.Price };
+
+            return Created("", response);
         }
 
         return NoContent();
@@ -66,9 +68,23 @@ public class ProductController : ControllerBase
 
     [HttpPut]
     [Route("Update")]
-    public IActionResult Update()
+    [ProducesResponseType(typeof(ReponsePostProduct), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Update(
+        [FromServices] HttpClient http,
+        [FromBody] RequestPostProduct request,
+        [FromHeader] int id)
     {
-        return Ok();
+        var httpResponse = await http.PutAsJsonAsync(ServicesURL.Product("update", id), request);
+
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var response = new ReponsePostProduct { Name = request.Name, Description = request.Description, Price = request.Price };
+
+            return Ok(response);
+        }
+
+        return NoContent();
     }
 
     [HttpDelete]
