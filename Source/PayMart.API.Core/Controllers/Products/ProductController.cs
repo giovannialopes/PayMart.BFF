@@ -36,7 +36,7 @@ public class ProductController : ControllerBase
         [FromServices] HttpClient http,
         [FromHeader] int id)
     {
-        var httpResponse = await http.GetStringAsync(ServicesURL.Product("getID",id));
+        var httpResponse = await http.GetStringAsync(ServicesURL.Product("getID", id));
 
         if (httpResponse != null)
         {
@@ -89,9 +89,20 @@ public class ProductController : ControllerBase
 
     [HttpDelete]
     [Route("Delete")]
-    public IActionResult Delete()
+    [ProducesResponseType(typeof(ReponsePostProduct), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Delete(
+        [FromServices] HttpClient http,
+        [FromHeader] int id)
     {
-        return Ok();
+        var httpResponse = await http.DeleteAsync(ServicesURL.Product("delete", id));
+
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            return Ok(httpResponse);
+        }
+
+        return NoContent();
     }
 
 }
