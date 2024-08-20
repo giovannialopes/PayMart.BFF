@@ -28,9 +28,20 @@ public class ProductController : ControllerBase
 
     [HttpGet]
     [Route("GetID")]
-    public IActionResult GetID()
+    [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> GetID(
+        [FromServices] HttpClient http,
+        [FromHeader] int id)
     {
-        return Ok();
+        var httpResponse = await http.GetStringAsync(ServicesURL.Product("getID",id));
+
+        if (httpResponse != null)
+        {
+            return Ok(JsonFormatter.Formatter(httpResponse));
+        }
+
+        return NoContent();
     }
 
     [HttpPost]
