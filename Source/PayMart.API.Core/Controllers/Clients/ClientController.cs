@@ -17,7 +17,7 @@ public class ClientController : ControllerBase
     [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> GetAllClient(
-    [FromServices] HttpClient http)
+        [FromServices] HttpClient http)
     {
         var httpResponse = await http.GetStringAsync(ServicesURL.Client("getAll"));
 
@@ -34,8 +34,8 @@ public class ClientController : ControllerBase
     [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> GetIDClient(
-    [FromServices] HttpClient http, 
-    [FromHeader] int id)
+        [FromServices] HttpClient http, 
+        [FromHeader] int id)
     {
         var httpResponse = await http.GetStringAsync(ServicesURL.Client("getID", id));
 
@@ -53,8 +53,8 @@ public class ClientController : ControllerBase
     [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> PostClient(
-    [FromServices] HttpClient http,
-    [FromBody] RequestPostClient request)
+        [FromServices] HttpClient http,
+        [FromBody] RequestPostClient request)
     {
         var httpResponse = await http.PostAsJsonAsync(ServicesURL.Client("post"), request);
 
@@ -72,8 +72,8 @@ public class ClientController : ControllerBase
     [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateClient(int id,
-    [FromServices] HttpClient http,
-    [FromBody] RequestPostClient request)
+        [FromServices] HttpClient http,
+        [FromBody] RequestPostClient request)
     {
         var httpResponse = await http.PutAsJsonAsync(ServicesURL.Client("update", id), request);
 
@@ -92,8 +92,8 @@ public class ClientController : ControllerBase
     [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Delete(
-    [FromServices] HttpClient http,
-    [FromHeader] int id)
+        [FromServices] HttpClient http,
+        [FromHeader] int id)
     {
         var httpResponse = await http.DeleteAsync(ServicesURL.Client("delete", id));
 
