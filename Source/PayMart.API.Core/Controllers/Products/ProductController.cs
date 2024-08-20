@@ -99,7 +99,7 @@ public class ProductController : ControllerBase
 
         if (httpResponse.IsSuccessStatusCode)
         {
-            return Ok(httpResponse);
+            return Ok();
         }
 
         return NoContent();
