@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PayMart.Application.Core.NovaPasta;
 using PayMart.Domain.Core.NovaPasta.NovaPasta;
+using PayMart.Domain.Core.Request.Product;
+using PayMart.Domain.Core.Response.Product;
 using PayMart.Infrastructure.Core.Services;
 
 namespace PayMart.API.Core.Controllers.Products;
@@ -11,7 +13,7 @@ public class ProductController : ControllerBase
 {
     [HttpGet]
     [Route("GetAll")]
-    [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ReponsePostProduct), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> GetAll(
         [FromServices] HttpClient http)
@@ -28,7 +30,7 @@ public class ProductController : ControllerBase
 
     [HttpGet]
     [Route("GetID")]
-    [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ReponsePostProduct), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> GetID(
         [FromServices] HttpClient http,
@@ -46,9 +48,20 @@ public class ProductController : ControllerBase
 
     [HttpPost]
     [Route("Post")]
-    public IActionResult Post()
+    [ProducesResponseType(typeof(ReponsePostProduct), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Post(
+        [FromServices] HttpClient http,
+        [FromBody] RequestPostProduct request)
     {
-        return Ok();
+        var httpResponse = await http.PostAsJsonAsync(ServicesURL.Product("post"), request);
+
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            return Created("",httpResponse);
+        }
+
+        return NoContent();
     }
 
     [HttpPut]
