@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PayMart.Application.Core.NovaPasta;
 using PayMart.Domain.Core.Request.Login;
 using PayMart.Domain.Core.Request.Order;
@@ -15,42 +16,43 @@ namespace PayMart.API.Core.Controllers.Login
         [HttpPost]
         [Route("GetUser")]
         [ProducesResponseType(typeof(ResponsePostLogin), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> GetID(
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetUser(
             [FromServices] HttpClient http,
             [FromBody] RequestPostLogin request)
         {
-            var httpResponse = await http.PostAsJsonAsync(ServicesURL.Login("getID"), request);
+            var httpResponse = await http.PostAsJsonAsync(ServicesURL.Login("getUser"), request);
 
             if (httpResponse.IsSuccessStatusCode)
             {
-                var response = new ResponsePostLogin { };
-
+                var responseContent = await httpResponse.Content.ReadAsStringAsync();
+                var response = JsonConvert.DeserializeObject<ResponsePostLogin>(responseContent);
                 return Ok(response);
             }
 
-            return NoContent();
+            return BadRequest();
         }
 
 
         [HttpPost]
         [Route("RegisterUser")]
         [ProducesResponseType(typeof(ResponsePostLogin), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Register(
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> RegisterUser(
             [FromServices] HttpClient http,
             [FromBody] RequestPostLogin request)
         {
-            var httpResponse = await http.PostAsJsonAsync(ServicesURL.Login("post"), request);
+            var httpResponse = await http.PostAsJsonAsync(ServicesURL.Login("registerUser"), request);
 
             if (httpResponse.IsSuccessStatusCode)
             {
-                var response = new ResponsePostLogin { };
+                var responseContent = await httpResponse.Content.ReadAsStringAsync();
+                var response = JsonConvert.DeserializeObject<ResponsePostLogin>(responseContent);
 
                 return Ok(response);
             }
 
-            return NoContent();
+            return BadRequest();
         }
 
     }
