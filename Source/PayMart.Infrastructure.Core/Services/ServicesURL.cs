@@ -2,11 +2,31 @@
 
 public static class ServicesURL
 {
+    public static string LoginUrl { get; set; } = "";
     public static string ClientUrl { get; set; } = "";
     public static string ProductUrl { get; set; } = "";
     public static string OrderUrl { get; set; } = "";
     public static string PaymentUrl { get; set; } = "";
 
+    public static string Login(string Url, object Config = null)
+    {
+        if (Url == "getAll")
+            LoginUrl = "https://localhost:5000/api/Login/getAll";
+
+        if (Url == "getID")
+            LoginUrl = "https://localhost:5000/api/Login/getID" + $"/{Config}";
+
+        if (Url == "post")
+            LoginUrl = "https://localhost:5000/api/Login/post";
+
+        if (Url == "update")
+            LoginUrl = "https://localhost:5000/api/Login/update" + $"/{Config}";
+
+        if (Url == "delete")
+            LoginUrl = "https://localhost:5000/api/Login/delete" + $"/{Config}";
+
+        return LoginUrl;
+    }
 
     public static string Client(string Url, object Config = null)
     {

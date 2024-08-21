@@ -13,7 +13,7 @@ public class ProductController : ControllerBase
 {
     [HttpGet]
     [Route("GetAll")]
-    [ProducesResponseType(typeof(ReponsePostProduct), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponsePostProduct), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> GetAll(
         [FromServices] HttpClient http)
@@ -30,7 +30,7 @@ public class ProductController : ControllerBase
 
     [HttpGet]
     [Route("GetID")]
-    [ProducesResponseType(typeof(ReponsePostProduct), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponsePostProduct), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> GetID(
         [FromServices] HttpClient http,
@@ -48,7 +48,7 @@ public class ProductController : ControllerBase
 
     [HttpPost]
     [Route("Post")]
-    [ProducesResponseType(typeof(ReponsePostProduct), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ResponsePostProduct), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Post(
         [FromServices] HttpClient http,
@@ -58,7 +58,7 @@ public class ProductController : ControllerBase
 
         if (httpResponse.IsSuccessStatusCode)
         {
-            var response = new ReponsePostProduct { Name = request.Name, Description = request.Description, Price = request.Price };
+            var response = new ResponsePostProduct { Name = request.Name, Description = request.Description, Price = request.Price };
 
             return Created("", response);
         }
@@ -68,7 +68,7 @@ public class ProductController : ControllerBase
 
     [HttpPut]
     [Route("Update")]
-    [ProducesResponseType(typeof(ReponsePostProduct), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponsePostProduct), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Update(
         [FromServices] HttpClient http,
@@ -79,7 +79,7 @@ public class ProductController : ControllerBase
 
         if (httpResponse.IsSuccessStatusCode)
         {
-            var response = new ReponsePostProduct { Name = request.Name, Description = request.Description, Price = request.Price };
+            var response = new ResponsePostProduct { Name = request.Name, Description = request.Description, Price = request.Price };
 
             return Ok(response);
         }
@@ -89,7 +89,7 @@ public class ProductController : ControllerBase
 
     [HttpDelete]
     [Route("Delete")]
-    [ProducesResponseType(typeof(ReponsePostProduct), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponsePostProduct), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Delete(
         [FromServices] HttpClient http,

@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PayMart.Application.Core.NovaPasta;
 using PayMart.Domain.Core.Request.Order;
-using PayMart.Domain.Core.Request.Product;
 using PayMart.Domain.Core.Response.Order;
-using PayMart.Domain.Core.Response.Product;
 using PayMart.Infrastructure.Core.Services;
 
 namespace PayMart.API.Core.Controllers.Orders;
@@ -55,7 +53,7 @@ public class OrdersController : ControllerBase
         [FromServices] HttpClient http,
         [FromBody] RequestPostOrder request)
     {
-        var httpResponse = await http.PostAsJsonAsync(ServicesURL.Product("post"), request);
+        var httpResponse = await http.PostAsJsonAsync(ServicesURL.Order("post"), request);
 
         if (httpResponse.IsSuccessStatusCode)
         {

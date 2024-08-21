@@ -1,6 +1,6 @@
 ﻿namespace PayMart.Domain.Core.Response.Product;
 
-public class ReponsePostProduct
+public class ResponsePostProduct
 {
     public string Name { get; set; } = "";
     public string Description { get; set; } = "";
