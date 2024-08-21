@@ -28,7 +28,6 @@ public static class ServicesURL
         return ClientUrl;
     }
 
-
     public static string Product(string Url, object Config = null)
     {
         if (Url == "getAll")
@@ -49,5 +48,24 @@ public static class ServicesURL
         return ProductUrl;
     }
 
+    public static string Order(string Url, object Config = null)
+    {
+        if (Url == "getAll")
+            OrderUrl = "https://localhost:5003/api/Order/getAll";
+
+        if (Url == "getID")
+            OrderUrl = "https://localhost:5003/api/Order/getID" + $"/{Config}";
+
+        if (Url == "post")
+            OrderUrl = "https://localhost:5003/api/Order/post";
+
+        if (Url == "update")
+            OrderUrl = "https://localhost:5003/api/Order/update" + $"/{Config}";
+
+        if (Url == "delete")
+            OrderUrl = "https://localhost:5003/api/Order/delete" + $"/{Config}";
+
+        return OrderUrl;
+    }
 
 }
