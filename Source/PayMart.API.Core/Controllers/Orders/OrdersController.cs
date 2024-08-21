@@ -14,7 +14,7 @@ public class OrdersController : ControllerBase
 {
     [HttpGet]
     [Route("GetAll")]
-    [ProducesResponseType(typeof(ReponsePostProduct), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponsePostOrder), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> GetAll(
        [FromServices] HttpClient http)
@@ -31,7 +31,7 @@ public class OrdersController : ControllerBase
 
     [HttpGet]
     [Route("GetID")]
-    [ProducesResponseType(typeof(ReponsePostProduct), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponsePostOrder), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> GetID(
         [FromServices] HttpClient http,
@@ -49,7 +49,7 @@ public class OrdersController : ControllerBase
 
     [HttpPost]
     [Route("Post")]
-    [ProducesResponseType(typeof(ReponsePostProduct), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ResponsePostOrder), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Post(
         [FromServices] HttpClient http,
@@ -62,6 +62,45 @@ public class OrdersController : ControllerBase
             var response = new ResponsePostOrder { Name = request.Name, Date = request.Date };
 
             return Created("", response);
+        }
+
+        return NoContent();
+    }
+
+    [HttpPut]
+    [Route("Update")]
+    [ProducesResponseType(typeof(ResponsePostOrder), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Update(
+        [FromServices] HttpClient http,
+        [FromBody] RequestPostOrder request,
+        [FromHeader] int id)
+    {
+        var httpResponse = await http.PutAsJsonAsync(ServicesURL.Order("update", id), request);
+
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var response = new ResponsePostOrder { Name = request.Name, Date = request.Date };
+
+            return Ok(response);
+        }
+
+        return NoContent();
+    }
+
+    [HttpDelete]
+    [Route("Delete")]
+    [ProducesResponseType(typeof(ResponsePostOrder), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Delete(
+        [FromServices] HttpClient http,
+        [FromHeader] int id)
+    {
+        var httpResponse = await http.DeleteAsync(ServicesURL.Order("delete", id));
+
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            return Ok();
         }
 
         return NoContent();
