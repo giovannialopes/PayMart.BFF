@@ -25,4 +25,22 @@ public class OrdersController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpGet]
+    [Route("GetID")]
+    [ProducesResponseType(typeof(ReponsePostProduct), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> GetID(
+        [FromServices] HttpClient http,
+        [FromHeader] int id)
+    {
+        var httpResponse = await http.GetStringAsync(ServicesURL.Order("getID", id));
+
+        if (httpResponse != null)
+        {
+            return Ok(JsonFormatter.Formatter(httpResponse));
+        }
+
+        return NoContent();
+    }
 }
