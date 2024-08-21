@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PayMart.Application.Core.NovaPasta;
+using PayMart.Domain.Core.Request.Order;
+using PayMart.Domain.Core.Request.Product;
+using PayMart.Domain.Core.Response.Order;
 using PayMart.Domain.Core.Response.Product;
 using PayMart.Infrastructure.Core.Services;
 
@@ -39,6 +42,26 @@ public class OrdersController : ControllerBase
         if (httpResponse != null)
         {
             return Ok(JsonFormatter.Formatter(httpResponse));
+        }
+
+        return NoContent();
+    }
+
+    [HttpPost]
+    [Route("Post")]
+    [ProducesResponseType(typeof(ReponsePostProduct), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Post(
+        [FromServices] HttpClient http,
+        [FromBody] RequestPostOrder request)
+    {
+        var httpResponse = await http.PostAsJsonAsync(ServicesURL.Product("post"), request);
+
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var response = new ResponsePostOrder { Name = request.Name, Date = request.Date };
+
+            return Created("", response);
         }
 
         return NoContent();
