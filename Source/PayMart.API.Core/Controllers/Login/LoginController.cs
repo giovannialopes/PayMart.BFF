@@ -33,7 +33,6 @@ namespace PayMart.API.Core.Controllers.Login
             return BadRequest();
         }
 
-
         [HttpPost]
         [Route("RegisterUser")]
         [ProducesResponseType(typeof(ResponsePostLogin), StatusCodes.Status200OK)]
