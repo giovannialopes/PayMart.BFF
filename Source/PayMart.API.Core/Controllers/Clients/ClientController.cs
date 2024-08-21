@@ -7,7 +7,7 @@ using PayMart.Infrastructure.Core.Services;
 
 namespace PayMart.API.Core.Controllers.Clients;
 
-[Route("api/")]
+[Route("api/[Controller]")]
 [ApiController]
 public class ClientController : ControllerBase
 {
