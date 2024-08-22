@@ -28,7 +28,7 @@ namespace PayMart.API.Core.Controllers.Login
                 var response = JsonConvert.DeserializeObject<ResponsePostLogin>(responseContent);
 
                 SaveResponse.SaveUserId(response!.Id);
-                return Ok(response);
+                return Ok("token:" + response.Token);
             }
 
             return BadRequest();
