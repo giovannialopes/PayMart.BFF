@@ -68,6 +68,17 @@ public class ProductController : ControllerBase
         return NoContent();
     }
 
+    [HttpGet]
+    [Route("RestartProduct")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> RestartProduct(
+    [FromServices] HttpClient http)
+    {
+        var httpResponse = await http.GetStringAsync(ServicesURL.Product("postRestart"));
+
+        return Ok("O carrinho não possui mais produtos!");
+    }
+
     [HttpPut]
     [Route("Update")]
     [ProducesResponseType(typeof(ResponsePostProduct), StatusCodes.Status200OK)]

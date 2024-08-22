@@ -53,6 +53,9 @@ public static class ServicesURL
         if (Url == "post")
             ProductUrl = "https://localhost:5002/api/Product/post" + $"/{Config}";
 
+        if (Url == "postRestart")
+            ProductUrl = "https://localhost:5002/api/Product/RestartProduct";
+
         if (Url == "update")
             ProductUrl = "https://localhost:5002/api/Product/update" + $"/{Config}" + $"/{userID}";
 
