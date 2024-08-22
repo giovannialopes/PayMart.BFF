@@ -79,4 +79,12 @@ public static class ServicesURL
         return OrderUrl;
     }
 
+    public static string Payment(string Url, object Config = null)
+    {
+        if (Url == "post")
+            PaymentUrl = "https://localhost:5004/api/Payment/post";
+
+        return PaymentUrl;
+    }
+
 }
