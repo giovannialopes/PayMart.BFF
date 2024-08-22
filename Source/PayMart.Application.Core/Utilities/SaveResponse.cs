@@ -14,8 +14,8 @@ public class SaveResponse
     public static int GetOrderId() => _orderId;
 
 
-    private static int _price;
-    public static void SavePrice(string price) => _price = 0;
-    public static int GetPrice() => _price;
+    private static string _price;
+    public static void SavePrice(string price) => _price = price;
+    public static string GetPrice() => _price;
 
 }

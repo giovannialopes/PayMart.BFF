@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PayMart.Application.Core.Utilities;
 using PayMart.Domain.Core.Request.Payment;
 using PayMart.Domain.Core.Response.Payment;
 using PayMart.Infrastructure.Core.Services;
@@ -18,7 +19,10 @@ public class PaymentController : ControllerBase
     [FromServices] HttpClient http,
     [FromBody] RequestPostPayment request)
     {
-        var httpResponse = await http.PostAsJsonAsync(ServicesURL.Payment("post"), request);
+        string price = SaveResponse.GetPrice();
+        int productID = SaveResponse.GetOrderId();
+
+        var httpResponse = await http.PostAsJsonAsync(ServicesURL.Payment("post", price, productID), request);
 
         if (httpResponse.IsSuccessStatusCode)
         {

@@ -88,10 +88,10 @@ public static class ServicesURL
         return OrderUrl;
     }
 
-    public static string Payment(string Url, object Config = null)
+    public static string Payment(string Url, object Config = null, object projectID = null)
     {
         if (Url == "post")
-            PaymentUrl = "https://localhost:5004/api/Payment/post";
+            PaymentUrl = "https://localhost:5004/api/Payment/post" + $"/{Config}" + $"/{projectID}";
 
         return PaymentUrl;
     }
