@@ -16,6 +16,9 @@ public static class ServicesURL
         if (Url == "getUser")
             LoginUrl = "https://localhost:5000/api/Login/getUser";
 
+        if (Url == "delete")
+            LoginUrl = "https://localhost:5000/api/Login/delete" + $"/{Config}";
+
         return LoginUrl;
     }
 

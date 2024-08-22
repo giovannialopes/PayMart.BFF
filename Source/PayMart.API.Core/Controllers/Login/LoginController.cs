@@ -60,5 +60,24 @@ namespace PayMart.API.Core.Controllers.Login
             return BadRequest();
         }
 
+        [HttpDelete]
+        [Route("Delete")]
+        [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> Delete(
+            [FromServices] HttpClient http,
+            [FromHeader] int id)
+        {
+            var httpResponse = await http.DeleteAsync(ServicesURL.Login("delete", id));
+
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                return Ok();
+            }
+
+            return NoContent();
+
+        }
+
     }
 }

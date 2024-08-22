@@ -103,6 +103,8 @@ public class ClientController : ControllerBase
 
         if (httpResponse.IsSuccessStatusCode)
         {
+            var httpResponseDelete = await http.DeleteAsync(ServicesURL.Login("delete", id));
+
             return Ok();
         }
 
