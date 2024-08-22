@@ -17,36 +17,36 @@ public class ClientController : ControllerBase
     [HttpGet]
     [Route("GetAll")]
     [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAllClient(
         [FromServices] HttpClient http)
     {
         var httpResponse = await http.GetStringAsync(ServicesURL.Client("getAll"));
 
-        if (httpResponse != null)
+        if (string.IsNullOrEmpty(httpResponse) == false)
         {
             return Ok(JsonFormatter.Formatter(httpResponse));
         }
 
-        return NoContent();
+        return BadRequest();
     }
 
     [HttpGet]
     [Route("GetID")]
     [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetIDClient(
-        [FromServices] HttpClient http, 
+        [FromServices] HttpClient http,
         [FromHeader] int id)
     {
         var httpResponse = await http.GetStringAsync(ServicesURL.Client("getID", id));
 
-        if (httpResponse != null)
+        if (string.IsNullOrEmpty(httpResponse) == false)
         {
             return Ok(JsonFormatter.Formatter(httpResponse));
         }
 
-        return NoContent();
+        return BadRequest();
 
     }
 
@@ -88,7 +88,7 @@ public class ClientController : ControllerBase
         }
 
         return NoContent();
-        
+
     }
 
     [HttpDelete]

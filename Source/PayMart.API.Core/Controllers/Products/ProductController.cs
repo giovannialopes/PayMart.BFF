@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PayMart.Application.Core.NovaPasta;
 using PayMart.Application.Core.Utilities;
 using PayMart.Domain.Core.NovaPasta.NovaPasta;
 using PayMart.Domain.Core.Request.Product;
+using PayMart.Domain.Core.Response.Order;
 using PayMart.Domain.Core.Response.Product;
 using PayMart.Infrastructure.Core.Services;
 
@@ -21,7 +23,7 @@ public class ProductController : ControllerBase
     {
         var httpResponse = await http.GetStringAsync(ServicesURL.Product("getAll"));
 
-        if (httpResponse != null)
+        if (string.IsNullOrEmpty(httpResponse) == false)
         {
             return Ok(JsonFormatter.Formatter(httpResponse));
         }
@@ -39,15 +41,13 @@ public class ProductController : ControllerBase
     {
         var httpResponse = await http.GetStringAsync(ServicesURL.Product("getID", id));
 
-        if (httpResponse != null)
+        if (string.IsNullOrEmpty(httpResponse) == false)
         {
             return Ok(JsonFormatter.Formatter(httpResponse));
         }
 
         return NoContent();
     }
-
-
 
     [HttpPost]
     [Route("Post")]
@@ -62,7 +62,8 @@ public class ProductController : ControllerBase
 
         if (httpResponse.IsSuccessStatusCode)
         {
-            var response = new ResponsePostProduct { Name = request.Name, Description = request.Description, Price = request.Price };
+            var responseContent = await httpResponse.Content.ReadAsStringAsync();
+            var response = JsonConvert.DeserializeObject<ResponsePostOrder>(responseContent);
 
             return Created("", response);
         }
@@ -95,7 +96,8 @@ public class ProductController : ControllerBase
 
         if (httpResponse.IsSuccessStatusCode)
         {
-            var response = new ResponsePostProduct { Name = request.Name, Description = request.Description, Price = request.Price };
+            var responseContent = await httpResponse.Content.ReadAsStringAsync();
+            var response = JsonConvert.DeserializeObject<ResponsePostOrder>(responseContent);
 
             return Ok(response);
         }

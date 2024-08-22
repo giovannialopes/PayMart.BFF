@@ -15,7 +15,7 @@ namespace PayMart.API.Core.Controllers.Login
         [HttpPost]
         [Route("GetUser")]
         [ProducesResponseType(typeof(ResponsePostLogin), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ResponsePostLogin), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetUser(
             [FromServices] HttpClient http,
             [FromBody] RequestGetUserLogin request)
@@ -28,7 +28,7 @@ namespace PayMart.API.Core.Controllers.Login
                 var response = JsonConvert.DeserializeObject<ResponsePostLogin>(responseContent);
 
                 SaveResponse.SaveUserId(response!.Id);
-                return Ok("token:" + response.Token);
+                return Ok(response);
             }
 
             return BadRequest();
@@ -37,7 +37,7 @@ namespace PayMart.API.Core.Controllers.Login
         [HttpPost]
         [Route("RegisterUser")]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ResponsePostLogin), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RegisterUser(
             [FromServices] HttpClient http,
             [FromBody] RequestRegisterUserLogin request)
@@ -48,8 +48,7 @@ namespace PayMart.API.Core.Controllers.Login
             {
                 var responseContent = await httpResponse.Content.ReadAsStringAsync();
                 var response = JsonConvert.DeserializeObject<ResponsePostLogin>(responseContent);
-
-                
+         
                 var requestClient = JsonConvert.DeserializeObject<ResponsePostClient>(responseContent);
                 var httpResponseClient = await http.PostAsJsonAsync(ServicesURL.Client("post", response!.Id), requestClient);
 

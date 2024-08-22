@@ -16,36 +16,36 @@ public class OrdersController : ControllerBase
     [HttpGet]
     [Route("GetAll")]
     [ProducesResponseType(typeof(ResponsePostOrder), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAll(
        [FromServices] HttpClient http)
     {
         var httpResponse = await http.GetStringAsync(ServicesURL.Order("getAll"));
 
-        if (httpResponse != null)
+        if (string.IsNullOrEmpty(httpResponse) == false)
         {
             return Ok(JsonFormatter.Formatter(httpResponse));
         }
 
-        return NoContent();
+        return BadRequest();
     }
 
     [HttpGet]
     [Route("GetID")]
     [ProducesResponseType(typeof(ResponsePostOrder), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetID(
         [FromServices] HttpClient http,
         [FromHeader] int id)
     {
         var httpResponse = await http.GetStringAsync(ServicesURL.Order("getID", id));
 
-        if (httpResponse != null)
+        if (string.IsNullOrEmpty(httpResponse) == false)
         {
             return Ok(JsonFormatter.Formatter(httpResponse));
         }
 
-        return NoContent();
+        return BadRequest();
     }
 
     [HttpPost]
@@ -88,7 +88,8 @@ public class OrdersController : ControllerBase
 
         if (httpResponse.IsSuccessStatusCode)
         {
-            var response = new ResponsePostOrder { ProductID = request.ProductID, Name = request.Name };
+            var responseContent = await httpResponse.Content.ReadAsStringAsync();
+            var response = JsonConvert.DeserializeObject<ResponsePostOrder>(responseContent);
 
             return Ok(response);
         }
