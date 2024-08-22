@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PayMart.Application.Core.NovaPasta;
+using PayMart.Application.Core.Utilities;
 using PayMart.Domain.Core.Request.Order;
+using PayMart.Domain.Core.Response.Login;
 using PayMart.Domain.Core.Response.Order;
 using PayMart.Infrastructure.Core.Services;
 
@@ -53,11 +56,18 @@ public class OrdersController : ControllerBase
         [FromServices] HttpClient http,
         [FromBody] RequestPostOrder request)
     {
-        var httpResponse = await http.PostAsJsonAsync(ServicesURL.Order("post"), request);
+        int userID = SaveResponse.GetUserId();
+        var httpResponse = await http.PostAsJsonAsync(ServicesURL.Order("post", userID), request);
 
         if (httpResponse.IsSuccessStatusCode)
         {
-            var response = new ResponsePostOrder { Name = request.Name, Date = request.Date };
+            var responseContent = await httpResponse.Content.ReadAsStringAsync();
+            var response = JsonConvert.DeserializeObject<ResponsePostOrder>(responseContent);
+
+            var httpSum = await http.GetStringAsync(ServicesURL.Product("getSumProducts", response!.ProductID));
+
+            SaveResponse.SavePrice(httpSum);
+            SaveResponse.SaveOrderId(response.id);
 
             return Created("", response);
         }
@@ -78,7 +88,7 @@ public class OrdersController : ControllerBase
 
         if (httpResponse.IsSuccessStatusCode)
         {
-            var response = new ResponsePostOrder { Name = request.Name, Date = request.Date };
+            var response = new ResponsePostOrder { ProductID = request.ProductID, Name = request.Name };
 
             return Ok(response);
         }

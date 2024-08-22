@@ -9,6 +9,13 @@ public class SaveResponse
     public static int GetUserId() => _userId;
 
 
+    private static int _orderId;
+    public static void SaveOrderId(int orderId) => _orderId = orderId;
+    public static int GetOrderId() => _orderId;
 
+
+    private static int _price;
+    public static void SavePrice(string price) => _price = 0;
+    public static int GetPrice() => _price;
 
 }

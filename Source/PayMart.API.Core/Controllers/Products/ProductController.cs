@@ -47,6 +47,8 @@ public class ProductController : ControllerBase
         return NoContent();
     }
 
+
+
     [HttpPost]
     [Route("Post")]
     [ProducesResponseType(typeof(ResponsePostProduct), StatusCodes.Status201Created)]

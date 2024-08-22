@@ -54,7 +54,10 @@ public static class ServicesURL
             ProductUrl = "https://localhost:5002/api/Product/post" + $"/{Config}";
 
         if (Url == "postRestart")
-            ProductUrl = "https://localhost:5002/api/Product/RestartProduct";
+            ProductUrl = "https://localhost:5002/api/Product/restartProduct";
+
+        if (Url == "getSumProducts")
+            ProductUrl = "https://localhost:5002/api/Product/getSumProducts" + $"/{Config}";
 
         if (Url == "update")
             ProductUrl = "https://localhost:5002/api/Product/update" + $"/{Config}" + $"/{userID}";
@@ -65,7 +68,7 @@ public static class ServicesURL
         return ProductUrl;
     }
 
-    public static string Order(string Url, object Config = null)
+    public static string Order(string Url, object Config = null, object userID = null)
     {
         if (Url == "getAll")
             OrderUrl = "https://localhost:5003/api/Order/getAll";
@@ -74,10 +77,10 @@ public static class ServicesURL
             OrderUrl = "https://localhost:5003/api/Order/getID" + $"/{Config}";
 
         if (Url == "post")
-            OrderUrl = "https://localhost:5003/api/Order/post"; 
+            OrderUrl = "https://localhost:5003/api/Order/post" + $"/{Config}"; 
 
         if (Url == "update")
-            OrderUrl = "https://localhost:5003/api/Order/update" + $"/{Config}";
+            OrderUrl = "https://localhost:5003/api/Order/update" + $"/{Config}" + $"/{userID}";
 
         if (Url == "delete")
             OrderUrl = "https://localhost:5003/api/Order/delete" + $"/{Config}";
