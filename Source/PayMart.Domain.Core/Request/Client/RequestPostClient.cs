@@ -1,4 +1,6 @@
-﻿namespace PayMart.Domain.Core.Request.Client;
+﻿using System.Text.Json.Serialization;
+
+namespace PayMart.Domain.Core.Request.Client;
 
 public class RequestPostClient
 {
@@ -7,5 +9,7 @@ public class RequestPostClient
     public string PhoneNumber { get; set; } = "";
     public int Age { get; set; }
     public string Address { get; set; } = "";
-    public int CPF { get; set; }
+
+    [JsonIgnore]
+    public int UserID { get; set; }
 }

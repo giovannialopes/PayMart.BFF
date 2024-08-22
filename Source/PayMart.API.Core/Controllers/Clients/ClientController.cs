@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PayMart.Application.Core.NovaPasta;
+using PayMart.Application.Core.Utilities;
 using PayMart.Domain.Core.NovaPasta.NovaPasta;
 using PayMart.Domain.Core.Request.Client;
 using PayMart.Infrastructure.Core.Services;
+using System.Text;
 
 namespace PayMart.API.Core.Controllers.Clients;
 
@@ -55,7 +58,8 @@ public class ClientController : ControllerBase
         [FromServices] HttpClient http,
         [FromBody] RequestPostClient request)
     {
-        var httpResponse = await http.PostAsJsonAsync(ServicesURL.Client("post"), request);
+        int id = SaveResponse.GetUserId();
+        var httpResponse = await http.PostAsJsonAsync(ServicesURL.Client("post", id), request);
 
         if (httpResponse.IsSuccessStatusCode)
         {

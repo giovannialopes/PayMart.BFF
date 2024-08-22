@@ -28,7 +28,7 @@ public static class ServicesURL
             ClientUrl = "https://localhost:5001/api/Client/getID" + $"/{Config}";
 
         if (Url == "post")
-            ClientUrl = "https://localhost:5001/api/Client/post";
+            ClientUrl = "https://localhost:5001/api/Client/post" + $"/{Config}";
 
         if (Url == "update")
             ClientUrl = "https://localhost:5001/api/Client/update" + $"/{Config}";
