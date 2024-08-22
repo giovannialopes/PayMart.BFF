@@ -2,5 +2,6 @@
 
 public class ResponsePostLogin
 {
+    public int Id { get; set; } 
     public string Token { get; set; } = "";
 }

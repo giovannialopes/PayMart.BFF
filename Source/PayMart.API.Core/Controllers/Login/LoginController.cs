@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using PayMart.Application.Core.NovaPasta;
+using PayMart.Application.Core.Utilities;
 using PayMart.Domain.Core.Request.Login;
-using PayMart.Domain.Core.Request.Order;
 using PayMart.Domain.Core.Response.Login;
-using PayMart.Domain.Core.Response.Order;
 using PayMart.Infrastructure.Core.Services;
 
 namespace PayMart.API.Core.Controllers.Login
@@ -19,7 +17,7 @@ namespace PayMart.API.Core.Controllers.Login
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetUser(
             [FromServices] HttpClient http,
-            [FromBody] RequestPostLogin request)
+            [FromBody] RequestGetUserLogin request)
         {
             var httpResponse = await http.PostAsJsonAsync(ServicesURL.Login("getUser"), request);
 
@@ -27,6 +25,8 @@ namespace PayMart.API.Core.Controllers.Login
             {
                 var responseContent = await httpResponse.Content.ReadAsStringAsync();
                 var response = JsonConvert.DeserializeObject<ResponsePostLogin>(responseContent);
+
+                SaveResponse.SaveUserId(response!.Id);
                 return Ok(response);
             }
 
@@ -35,20 +35,19 @@ namespace PayMart.API.Core.Controllers.Login
 
         [HttpPost]
         [Route("RegisterUser")]
-        [ProducesResponseType(typeof(ResponsePostLogin), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RegisterUser(
             [FromServices] HttpClient http,
-            [FromBody] RequestPostLogin request)
+            [FromBody] RequestRegisterUserLogin request)
         {
             var httpResponse = await http.PostAsJsonAsync(ServicesURL.Login("registerUser"), request);
 
             if (httpResponse.IsSuccessStatusCode)
             {
                 var responseContent = await httpResponse.Content.ReadAsStringAsync();
-                var response = JsonConvert.DeserializeObject<ResponsePostLogin>(responseContent);
 
-                return Ok(response);
+                return Ok(responseContent);
             }
 
             return BadRequest();
