@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PayMart.Application.Core.Utilities;
+using PayMart.Domain.Core.NovaPasta.NovaPasta;
 using PayMart.Domain.Core.Request.Login;
 using PayMart.Domain.Core.Response.Login;
 using PayMart.Infrastructure.Core.Services;
@@ -35,7 +36,7 @@ namespace PayMart.API.Core.Controllers.Login
 
         [HttpPost]
         [Route("RegisterUser")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RegisterUser(
             [FromServices] HttpClient http,
@@ -46,8 +47,14 @@ namespace PayMart.API.Core.Controllers.Login
             if (httpResponse.IsSuccessStatusCode)
             {
                 var responseContent = await httpResponse.Content.ReadAsStringAsync();
+                var response = JsonConvert.DeserializeObject<ResponsePostLogin>(responseContent);
 
-                return Ok(responseContent);
+                
+                var requestClient = JsonConvert.DeserializeObject<ResponsePostClient>(responseContent);
+                var httpResponseClient = await http.PostAsJsonAsync(ServicesURL.Client("post", response!.Id), requestClient);
+
+                SaveResponse.SaveUserId(response.Id);
+                return Created("","Usuário criado com Sucesso!");
             }
 
             return BadRequest();

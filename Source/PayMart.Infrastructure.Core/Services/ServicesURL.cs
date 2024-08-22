@@ -19,7 +19,7 @@ public static class ServicesURL
         return LoginUrl;
     }
 
-    public static string Client(string Url, object Config = null)
+    public static string Client(string Url, object Config = null, object userID = null)
     {
         if (Url == "getAll")
             ClientUrl = "https://localhost:5001/api/Client/getAll";
@@ -31,7 +31,7 @@ public static class ServicesURL
             ClientUrl = "https://localhost:5001/api/Client/post" + $"/{Config}";
 
         if (Url == "update")
-            ClientUrl = "https://localhost:5001/api/Client/update" + $"/{Config}";
+            ClientUrl = "https://localhost:5001/api/Client/update" + $"/{Config}" + $"/{userID}";
 
         if (Url == "delete")
             ClientUrl = "https://localhost:5001/api/Client/delete" + $"/{Config}";

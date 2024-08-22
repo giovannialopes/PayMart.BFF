@@ -78,7 +78,8 @@ public class ClientController : ControllerBase
         [FromServices] HttpClient http,
         [FromBody] RequestPostClient request)
     {
-        var httpResponse = await http.PutAsJsonAsync(ServicesURL.Client("update", id), request);
+        int userID = SaveResponse.GetUserId();
+        var httpResponse = await http.PutAsJsonAsync(ServicesURL.Client("update", id, userID), request);
 
         if (httpResponse.IsSuccessStatusCode)
         {
