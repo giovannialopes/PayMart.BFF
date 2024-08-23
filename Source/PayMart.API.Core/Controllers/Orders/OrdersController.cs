@@ -56,7 +56,8 @@ public class OrdersController : ControllerBase
         [FromServices] HttpClient http,
         [FromBody] RequestPostOrder request)
     {
-        string userID = SaveResponse.GetUserToken();
+        string Token = SaveResponse.GetUserToken();
+        string userID = TakeIdJwt.GetUserIdFromToken(Token);
         var httpResponse = await http.PostAsJsonAsync(ServicesURL.Order("post", userID), request);
 
         if (httpResponse.IsSuccessStatusCode)
@@ -84,7 +85,9 @@ public class OrdersController : ControllerBase
         [FromBody] RequestPostOrder request,
         [FromHeader] int id)
     {
-        var httpResponse = await http.PutAsJsonAsync(ServicesURL.Order("update", id), request);
+        string Token = SaveResponse.GetUserToken();
+        string userID = TakeIdJwt.GetUserIdFromToken(Token);
+        var httpResponse = await http.PutAsJsonAsync(ServicesURL.Order("update", id, userID), request);
 
         if (httpResponse.IsSuccessStatusCode)
         {

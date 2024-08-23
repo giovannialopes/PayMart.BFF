@@ -48,11 +48,11 @@ namespace PayMart.API.Core.Controllers.Login
             {
                 var responseContent = await httpResponse.Content.ReadAsStringAsync();
                 var response = JsonConvert.DeserializeObject<ResponsePostLogin>(responseContent);
-         
-                var requestClient = JsonConvert.DeserializeObject<ResponsePostClient>(responseContent);
-                var httpResponseClient = await http.PostAsJsonAsync(ServicesURL.Client("post", response!.Token), requestClient);
 
-                SaveResponse.SaveUserToken(response.Token);
+                var requestClient = TakeIdJwt.GetAllFromToken(response.Token!);
+                var userID = TakeIdJwt.GetUserIdFromToken(response.Token!);
+                var httpResponseClient = await http.PostAsJsonAsync(ServicesURL.Client("post", userID), request);
+
                 return Created("","Usuário criado com Sucesso!");
             }
 

@@ -18,4 +18,5 @@ public class SaveResponse
     public static void SavePrice(string price) => _price = price;
     public static string GetPrice() => _price;
 
+
 }

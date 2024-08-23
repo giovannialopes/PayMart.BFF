@@ -5,7 +5,6 @@ using PayMart.Application.Core.Utilities;
 using PayMart.Domain.Core.NovaPasta.NovaPasta;
 using PayMart.Domain.Core.Request.Client;
 using PayMart.Infrastructure.Core.Services;
-using System.Text;
 
 namespace PayMart.API.Core.Controllers.Clients;
 
@@ -58,12 +57,14 @@ public class ClientController : ControllerBase
         [FromServices] HttpClient http,
         [FromBody] RequestPostClient request)
     {
-        string userID = SaveResponse.GetUserToken();
+        string Token = SaveResponse.GetUserToken();
+        string userID = TakeIdJwt.GetUserIdFromToken(Token);
         var httpResponse = await http.PostAsJsonAsync(ServicesURL.Client("post", userID), request);
 
         if (httpResponse.IsSuccessStatusCode)
         {
-            var response = new ResponsePostClient { Name = request.Name, Email = request.Email, Age = request.Age };
+            var responseContent = await httpResponse.Content.ReadAsStringAsync();
+            var response = JsonConvert.DeserializeObject<ResponsePostClient>(responseContent); 
             return Created("", response);
         }
 
@@ -78,12 +79,14 @@ public class ClientController : ControllerBase
         [FromServices] HttpClient http,
         [FromBody] RequestPostClient request)
     {
-        string userID = SaveResponse.GetUserToken();
+        string Token = SaveResponse.GetUserToken();
+        string userID = TakeIdJwt.GetUserIdFromToken(Token);
         var httpResponse = await http.PutAsJsonAsync(ServicesURL.Client("update", id, userID), request);
 
         if (httpResponse.IsSuccessStatusCode)
         {
-            var response = new ResponsePostClient { Name = request.Name, Email = request.Email, Age = request.Age };
+            var responseContent = await httpResponse.Content.ReadAsStringAsync();
+            var response = JsonConvert.DeserializeObject<ResponsePostClient>(responseContent); 
             return Ok(response);
         }
 
