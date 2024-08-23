@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PayMart.Application.Core.NovaPasta;
 using PayMart.Application.Core.Utilities;
 using PayMart.Domain.Core.NovaPasta.NovaPasta;
@@ -57,8 +58,10 @@ public class ProductController : ControllerBase
         [FromServices] HttpClient http,
         [FromBody] RequestPostProduct request)
     {
-        int userID = SaveResponse.GetUserId();
-        var httpResponse = await http.PostAsJsonAsync(ServicesURL.Product("post", userID), request);
+        string Token = SaveResponse.GetUserToken();
+        string userID = TakeIdJwt.GetUserIdFromToken(Token);
+
+        var httpResponse = await http.PostAsJsonAsync(ServicesURL.Product("post", 1), request);
 
         if (httpResponse.IsSuccessStatusCode)
         {
@@ -91,7 +94,9 @@ public class ProductController : ControllerBase
         [FromBody] RequestPostProduct request,
         [FromHeader] int id)
     {
-        int userID = SaveResponse.GetUserId();
+        string Token = SaveResponse.GetUserToken();
+        string userID = TakeIdJwt.GetUserIdFromToken(Token);
+
         var httpResponse = await http.PutAsJsonAsync(ServicesURL.Product("update", id, userID), request);
 
         if (httpResponse.IsSuccessStatusCode)

@@ -56,7 +56,7 @@ public class OrdersController : ControllerBase
         [FromServices] HttpClient http,
         [FromBody] RequestPostOrder request)
     {
-        int userID = SaveResponse.GetUserId();
+        string userID = SaveResponse.GetUserToken();
         var httpResponse = await http.PostAsJsonAsync(ServicesURL.Order("post", userID), request);
 
         if (httpResponse.IsSuccessStatusCode)

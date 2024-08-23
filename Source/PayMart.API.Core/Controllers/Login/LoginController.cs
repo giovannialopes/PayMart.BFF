@@ -27,7 +27,7 @@ namespace PayMart.API.Core.Controllers.Login
                 var responseContent = await httpResponse.Content.ReadAsStringAsync();
                 var response = JsonConvert.DeserializeObject<ResponsePostLogin>(responseContent);
 
-                SaveResponse.SaveUserId(response!.Id);
+                SaveResponse.SaveUserToken(response!.Token);
                 return Ok(response);
             }
 
@@ -50,9 +50,9 @@ namespace PayMart.API.Core.Controllers.Login
                 var response = JsonConvert.DeserializeObject<ResponsePostLogin>(responseContent);
          
                 var requestClient = JsonConvert.DeserializeObject<ResponsePostClient>(responseContent);
-                var httpResponseClient = await http.PostAsJsonAsync(ServicesURL.Client("post", response!.Id), requestClient);
+                var httpResponseClient = await http.PostAsJsonAsync(ServicesURL.Client("post", response!.Token), requestClient);
 
-                SaveResponse.SaveUserId(response.Id);
+                SaveResponse.SaveUserToken(response.Token);
                 return Created("","Usuário criado com Sucesso!");
             }
 

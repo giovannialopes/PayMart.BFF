@@ -6,6 +6,4 @@ public class ResponsePostLogin
 {
     public string Token { get; set; } = "";
 
-    [JsonIgnore]
-    public int Id { get; set; } 
 }
