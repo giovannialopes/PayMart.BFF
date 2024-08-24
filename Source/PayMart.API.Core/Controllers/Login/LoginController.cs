@@ -20,18 +20,9 @@ namespace PayMart.API.Core.Controllers.Login
             [FromServices] HttpClient http,
             [FromBody] RequestGetUserLogin request)
         {
-            var httpResponse = await http.PostAsJsonAsync(ServicesURL.Login("getUser"), request);
-
-            if (httpResponse.IsSuccessStatusCode)
-            {
-                var responseContent = await httpResponse.Content.ReadAsStringAsync();
-                var response = JsonConvert.DeserializeObject<ResponsePostLogin>(responseContent);
-
-                SaveResponse.SaveUserToken(response!.Token);
-                return Ok(response);
-            }
-
-            return BadRequest();
+            var response = await HttpResponseHandler.PostAsync<ResponsePostLogin>(http, ServicesURL.Login("getUser"), request);
+            SaveResponse.SaveUserToken(response.Token);
+            return Ok(response);
         }
 
         [HttpPost]
@@ -42,21 +33,8 @@ namespace PayMart.API.Core.Controllers.Login
             [FromServices] HttpClient http,
             [FromBody] RequestRegisterUserLogin request)
         {
-            var httpResponse = await http.PostAsJsonAsync(ServicesURL.Login("registerUser"), request);
-
-            if (httpResponse.IsSuccessStatusCode)
-            {
-                var responseContent = await httpResponse.Content.ReadAsStringAsync();
-                var response = JsonConvert.DeserializeObject<ResponsePostLogin>(responseContent);
-
-                var requestClient = TakeIdJwt.GetAllFromToken(response.Token!);
-                var userID = TakeIdJwt.GetUserIdFromToken(response.Token!);
-                var httpResponseClient = await http.PostAsJsonAsync(ServicesURL.Client("post", userID), request);
-
-                return Created("","Usuário criado com Sucesso!");
-            }
-
-            return BadRequest();
+            var response = await HttpResponseHandler.PostAsync<ResponsePostLogin>(http, ServicesURL.Login("registerUser"), request);
+            return Created("", response);
         }
 
         [HttpDelete]
@@ -67,15 +45,11 @@ namespace PayMart.API.Core.Controllers.Login
             [FromServices] HttpClient http,
             [FromHeader] int id)
         {
-            var httpResponse = await http.DeleteAsync(ServicesURL.Login("delete", id));
+            var httpResponse = await http.DeleteAsync(ServicesURL.Client("delete", id));
 
             if (httpResponse.IsSuccessStatusCode)
-            {
                 return Ok();
-            }
-
             return NoContent();
-
         }
 
     }

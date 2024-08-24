@@ -4,9 +4,9 @@ namespace PayMart.Application.Core.Utilities;
 
 public class SaveResponse
 {
-    private static string _userId = "";
-    public static void SaveUserToken(string userId) => _userId = userId;
-    public static string GetUserToken() => _userId;
+    private static string _tokenId = "";
+    public static void SaveUserToken(string tokenId) => _tokenId = tokenId;
+    public static string GetUserToken() => _tokenId;
 
 
     private static int _orderId;

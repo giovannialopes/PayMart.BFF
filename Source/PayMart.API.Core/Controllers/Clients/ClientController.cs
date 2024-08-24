@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PayMart.Application.Core.NovaPasta;
 using PayMart.Application.Core.Utilities;
+using PayMart.Domain.Core.Exception.ResourceExceptions;
 using PayMart.Domain.Core.NovaPasta.NovaPasta;
 using PayMart.Domain.Core.Request.Client;
+using PayMart.Domain.Core.Response.Login;
 using PayMart.Infrastructure.Core.Services;
 
 namespace PayMart.API.Core.Controllers.Clients;
@@ -27,7 +30,7 @@ public class ClientController : ControllerBase
             return Ok(JsonFormatter.Formatter(httpResponse));
         }
 
-        return BadRequest();
+        return BadRequest(ResourceExceptionsClient.ERRO_NAO_POSSUI_CLIENTE);
     }
 
     [HttpGet]
@@ -37,7 +40,7 @@ public class ClientController : ControllerBase
     public async Task<IActionResult> GetIDClient(
         [FromServices] HttpClient http,
         [FromHeader] int id)
-    {
+        {
         var httpResponse = await http.GetStringAsync(ServicesURL.Client("getID", id));
 
         if (string.IsNullOrEmpty(httpResponse) == false)
@@ -45,30 +48,24 @@ public class ClientController : ControllerBase
             return Ok(JsonFormatter.Formatter(httpResponse));
         }
 
-        return BadRequest();
+        return BadRequest(ResourceExceptionsClient.ERRO_NAO_POSSUI_CLIENTE);
 
     }
 
     [HttpPost]
     [Route("Post")]
     [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> PostClient(
         [FromServices] HttpClient http,
         [FromBody] RequestPostClient request)
     {
         string Token = SaveResponse.GetUserToken();
-        string userID = TakeIdJwt.GetUserIdFromToken(Token);
-        var httpResponse = await http.PostAsJsonAsync(ServicesURL.Client("post", userID), request);
+        var response = await HttpResponseHandler.PostAsync<ResponsePostClient>(http, ServicesURL.Client("post", TakeIdJwt.GetUserIdFromToken(Token)), request);
+        if (response == null)
+            return BadRequest(ResourceExceptionsClient.ERRO_EMAIL_REGISTRADO);
 
-        if (httpResponse.IsSuccessStatusCode)
-        {
-            var responseContent = await httpResponse.Content.ReadAsStringAsync();
-            var response = JsonConvert.DeserializeObject<ResponsePostClient>(responseContent); 
-            return Created("", response);
-        }
-
-        return NoContent();
+        return Created("", response);
     }
 
     [HttpPut]
@@ -79,19 +76,12 @@ public class ClientController : ControllerBase
         [FromServices] HttpClient http,
         [FromBody] RequestPostClient request)
     {
-        string Token = SaveResponse.GetUserToken();
-        string userID = TakeIdJwt.GetUserIdFromToken(Token);
-        var httpResponse = await http.PutAsJsonAsync(ServicesURL.Client("update", id, userID), request);
+        string token = SaveResponse.GetUserToken();
+        var response = await HttpResponseHandler.PutAsync<ResponsePostClient>(http, ServicesURL.Client("update", id, TakeIdJwt.GetUserIdFromToken(token)), request);
+        if (response == null)
+            return BadRequest(ResourceExceptionsClient.ERRO_EMAIL_REGISTRADO);
 
-        if (httpResponse.IsSuccessStatusCode)
-        {
-            var responseContent = await httpResponse.Content.ReadAsStringAsync();
-            var response = JsonConvert.DeserializeObject<ResponsePostClient>(responseContent); 
-            return Ok(response);
-        }
-
-        return NoContent();
-
+        return Ok(response);
     }
 
     [HttpDelete]
@@ -105,11 +95,7 @@ public class ClientController : ControllerBase
         var httpResponse = await http.DeleteAsync(ServicesURL.Client("delete", id));
 
         if (httpResponse.IsSuccessStatusCode)
-        {
-            var httpResponseDelete = await http.DeleteAsync(ServicesURL.Login("delete", id));
-
             return Ok();
-        }
 
         return NoContent();
 

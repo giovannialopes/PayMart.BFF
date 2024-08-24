@@ -111,10 +111,7 @@ public class OrdersController : ControllerBase
         var httpResponse = await http.DeleteAsync(ServicesURL.Order("delete", id));
 
         if (httpResponse.IsSuccessStatusCode)
-        {
             return Ok();
-        }
-
         return NoContent();
     }
 }
