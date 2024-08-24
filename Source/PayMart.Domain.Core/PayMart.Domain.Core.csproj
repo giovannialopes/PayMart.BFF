@@ -16,12 +16,21 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ResourceExceptionsClient.resx</DependentUpon>
     </Compile>
+    <Compile Update="Exception\ResourceExceptions\ResourceExceptionsLogin.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResourceExceptionsLogin.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="Exception\ResourceExceptions\ResourceExceptionsClient.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ResourceExceptionsClient.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Exception\ResourceExceptions\ResourceExceptionsLogin.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourceExceptionsLogin.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

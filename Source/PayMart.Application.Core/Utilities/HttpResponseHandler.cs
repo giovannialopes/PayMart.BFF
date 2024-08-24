@@ -37,17 +37,15 @@ public class HttpResponseHandler
         return await HandleResponseAsync<T>(httpResponse);
     }
 
-    public static async Task<bool> DeleteAsync(HttpClient httpClient, string url)
+    public static async Task<string?> DeleteAsync(HttpClient httpClient, string url)
     {
         var httpResponse = await httpClient.DeleteAsync(url);
-
-        if (httpResponse.IsSuccessStatusCode)
-        {
-            return true;
-        }
-
         var responseContent = await httpResponse.Content.ReadAsStringAsync();
-        throw new HttpRequestException($"Request failed with status code {httpResponse.StatusCode}: {responseContent}");
+
+        if (responseContent != "")
+            return "Ok";
+    
+        return null;
     }
 
 

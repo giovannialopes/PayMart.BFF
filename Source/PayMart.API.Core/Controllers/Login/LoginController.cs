@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PayMart.Application.Core.Utilities;
+using PayMart.Domain.Core.Exception.ResourceExceptions;
 using PayMart.Domain.Core.NovaPasta.NovaPasta;
 using PayMart.Domain.Core.Request.Login;
 using PayMart.Domain.Core.Response.Login;
@@ -14,13 +15,16 @@ namespace PayMart.API.Core.Controllers.Login
     {
         [HttpPost]
         [Route("GetUser")]
-        [ProducesResponseType(typeof(ResponsePostLogin), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ResponsePostLogin), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetUser(
             [FromServices] HttpClient http,
             [FromBody] RequestGetUserLogin request)
         {
             var response = await HttpResponseHandler.PostAsync<ResponsePostLogin>(http, ServicesURL.Login("getUser"), request);
+            if (response == null)
+                return BadRequest(ResourceExceptionsLogin.USUARIO_NAO_ENCONTRADO);
+
             SaveResponse.SaveUserToken(response.Token);
             return Ok(response);
         }
@@ -28,28 +32,31 @@ namespace PayMart.API.Core.Controllers.Login
         [HttpPost]
         [Route("RegisterUser")]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ResponsePostLogin), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RegisterUser(
             [FromServices] HttpClient http,
             [FromBody] RequestRegisterUserLogin request)
         {
             var response = await HttpResponseHandler.PostAsync<ResponsePostLogin>(http, ServicesURL.Login("registerUser"), request);
-            return Created("", response);
+            if (response == null)
+                return BadRequest(ResourceExceptionsLogin.EMAIL_EXISTENTE);
+
+            return Created("", ResourceExceptionsLogin.USUARIO_CRIADO);
         }
 
         [HttpDelete]
         [Route("Delete")]
-        [ProducesResponseType(typeof(ResponsePostClient), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(
             [FromServices] HttpClient http,
             [FromHeader] int id)
         {
-            var httpResponse = await http.DeleteAsync(ServicesURL.Client("delete", id));
+            var response = await HttpResponseHandler.DeleteAsync(http, ServicesURL.Login("delete", id));
+            if (response == null)
+                return BadRequest();
 
-            if (httpResponse.IsSuccessStatusCode)
-                return Ok();
-            return NoContent();
+            return Ok();
         }
 
     }
