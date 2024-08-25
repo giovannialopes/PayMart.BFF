@@ -21,6 +21,21 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ResourceExceptionsLogin.resx</DependentUpon>
     </Compile>
+    <Compile Update="Exception\ResourceExceptions\ResourceExceptionsOrder.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResourceExceptionsOrder.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Exception\ResourceExceptions\ResourceExceptionsPayment.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResourceExceptionsPayment.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Exception\ResourceExceptions\ResourceExceptionsProducts.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResourceExceptionsProducts.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +46,18 @@
     <EmbeddedResource Update="Exception\ResourceExceptions\ResourceExceptionsLogin.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ResourceExceptionsLogin.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Exception\ResourceExceptions\ResourceExceptionsOrder.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourceExceptionsOrder.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Exception\ResourceExceptions\ResourceExceptionsPayment.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourceExceptionsPayment.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Exception\ResourceExceptions\ResourceExceptionsProducts.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourceExceptionsProducts.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

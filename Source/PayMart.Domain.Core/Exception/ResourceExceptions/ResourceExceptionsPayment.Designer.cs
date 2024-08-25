@@ -22,14 +22,14 @@ namespace PayMart.Domain.Core.Exception.ResourceExceptions {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ResourceExceptionsLogin {
+    public class ResourceExceptionsPayment {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ResourceExceptionsLogin() {
+        internal ResourceExceptionsPayment() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace PayMart.Domain.Core.Exception.ResourceExceptions {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PayMart.Domain.Core.Exception.ResourceExceptions.ResourceExceptionsLogin", typeof(ResourceExceptionsLogin).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PayMart.Domain.Core.Exception.ResourceExceptions.ResourceExceptionsPayment", typeof(ResourceExceptionsPayment).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,35 +57,6 @@ namespace PayMart.Domain.Core.Exception.ResourceExceptions {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Úsuario criado com sucesso!.
-        /// </summary>
-        public static string CRIACAO_DE_USUARIO {
-            get {
-                return ResourceManager.GetString("CRIACAO_DE_USUARIO", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Email já existente. .
-        /// </summary>
-        public static string ERRO_EMAIL_EXISTENTE {
-            get {
-                return ResourceManager.GetString("ERRO_EMAIL_EXISTENTE", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Usuario não encontrado!
-        ///
-        ///Email ou senha inválido..
-        /// </summary>
-        public static string ERRO_USUARIO_NAO_ENCONTRADO {
-            get {
-                return ResourceManager.GetString("ERRO_USUARIO_NAO_ENCONTRADO", resourceCulture);
             }
         }
     }

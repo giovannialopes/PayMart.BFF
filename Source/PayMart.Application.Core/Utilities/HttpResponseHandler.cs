@@ -25,12 +25,6 @@ public class HttpResponseHandler
         return await HandleResponseAsync<T>(httpResponse);
     }
 
-    public static async Task<T> GetAsync<T>(HttpClient httpClient, string url) where T : class, new()
-    {
-        var httpResponse = await httpClient.GetAsync(url);
-        return await HandleResponseAsync<T>(httpResponse);
-    }
-
     public static async Task<T> PutAsync<T>(HttpClient httpClient, string url, object request) where T : class, new()
     {
         var httpResponse = await httpClient.PutAsJsonAsync(url, request);
@@ -47,8 +41,5 @@ public class HttpResponseHandler
     
         return null;
     }
-
-
-
 
 }

@@ -23,7 +23,7 @@ namespace PayMart.API.Core.Controllers.Login
         {
             var response = await HttpResponseHandler.PostAsync<ResponsePostLogin>(http, ServicesURL.Login("getUser"), request);
             if (response == null)
-                return BadRequest(ResourceExceptionsLogin.USUARIO_NAO_ENCONTRADO);
+                return BadRequest(ResourceExceptionsLogin.ERRO_USUARIO_NAO_ENCONTRADO);
 
             SaveResponse.SaveUserToken(response.Token);
             return Ok(response);
@@ -39,9 +39,9 @@ namespace PayMart.API.Core.Controllers.Login
         {
             var response = await HttpResponseHandler.PostAsync<ResponsePostLogin>(http, ServicesURL.Login("registerUser"), request);
             if (response == null)
-                return BadRequest(ResourceExceptionsLogin.EMAIL_EXISTENTE);
+                return BadRequest(ResourceExceptionsLogin.ERRO_EMAIL_EXISTENTE);
 
-            return Created("", ResourceExceptionsLogin.USUARIO_CRIADO);
+            return Created("", ResourceExceptionsLogin.CRIACAO_DE_USUARIO);
         }
 
         [HttpDelete]

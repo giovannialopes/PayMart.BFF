@@ -22,14 +22,14 @@ namespace PayMart.Domain.Core.Exception.ResourceExceptions {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ResourceExceptionsLogin {
+    public class ResourceExceptionsOrder {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ResourceExceptionsLogin() {
+        internal ResourceExceptionsOrder() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace PayMart.Domain.Core.Exception.ResourceExceptions {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PayMart.Domain.Core.Exception.ResourceExceptions.ResourceExceptionsLogin", typeof(ResourceExceptionsLogin).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PayMart.Domain.Core.Exception.ResourceExceptions.ResourceExceptionsOrder", typeof(ResourceExceptionsOrder).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,31 +61,29 @@ namespace PayMart.Domain.Core.Exception.ResourceExceptions {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Úsuario criado com sucesso!.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Não foi possível encontrar pedidos..
         /// </summary>
-        public static string CRIACAO_DE_USUARIO {
+        public static string ERRO_NAO_POSSUI_ORDER {
             get {
-                return ResourceManager.GetString("CRIACAO_DE_USUARIO", resourceCulture);
+                return ResourceManager.GetString("ERRO_NAO_POSSUI_ORDER", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Email já existente. .
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Esse pedido ja foi criado..
         /// </summary>
-        public static string ERRO_EMAIL_EXISTENTE {
+        public static string ERRO_PEDIDO_JA_CRIADO {
             get {
-                return ResourceManager.GetString("ERRO_EMAIL_EXISTENTE", resourceCulture);
+                return ResourceManager.GetString("ERRO_PEDIDO_JA_CRIADO", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Usuario não encontrado!
-        ///
-        ///Email ou senha inválido..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O Pedido com o Nome #name foi criado com sucesso!.
         /// </summary>
-        public static string ERRO_USUARIO_NAO_ENCONTRADO {
+        public static string PEDIDO_CRIADO {
             get {
-                return ResourceManager.GetString("ERRO_USUARIO_NAO_ENCONTRADO", resourceCulture);
+                return ResourceManager.GetString("PEDIDO_CRIADO", resourceCulture);
             }
         }
     }

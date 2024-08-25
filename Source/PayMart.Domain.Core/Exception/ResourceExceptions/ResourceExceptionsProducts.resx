@@ -117,15 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CRIACAO_DE_USUARIO" xml:space="preserve">
-    <value>Úsuario criado com sucesso!</value>
-  </data>
-  <data name="ERRO_EMAIL_EXISTENTE" xml:space="preserve">
-    <value>Email já existente. </value>
-  </data>
-  <data name="ERRO_USUARIO_NAO_ENCONTRADO" xml:space="preserve">
-    <value>Usuario não encontrado!
-
-Email ou senha inválido.</value>
+  <data name="CARRINHO_VAZIO" xml:space="preserve">
+    <value>O carrinho não possui mais nenhum produto.</value>
   </data>
 </root>

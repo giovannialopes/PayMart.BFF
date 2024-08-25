@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PayMart.Application.Core.NovaPasta;
 using PayMart.Application.Core.Utilities;
+using PayMart.Domain.Core.Exception.ResourceExceptions;
 using PayMart.Domain.Core.NovaPasta.NovaPasta;
 using PayMart.Domain.Core.Request.Product;
 using PayMart.Domain.Core.Response.Order;
@@ -50,29 +51,6 @@ public class ProductController : ControllerBase
         return NoContent();
     }
 
-    [HttpPost]
-    [Route("Post")]
-    [ProducesResponseType(typeof(ResponsePostProduct), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> Post(
-        [FromServices] HttpClient http,
-        [FromBody] RequestPostProduct request)
-    {
-        string Token = SaveResponse.GetUserToken();
-        string userID = TakeIdJwt.GetUserIdFromToken(Token);
-
-        var httpResponse = await http.PostAsJsonAsync(ServicesURL.Product("post", 1), request);
-
-        if (httpResponse.IsSuccessStatusCode)
-        {
-            var responseContent = await httpResponse.Content.ReadAsStringAsync();
-            var response = JsonConvert.DeserializeObject<ResponsePostOrder>(responseContent);
-
-            return Created("", response);
-        }
-
-        return NoContent();
-    }
 
     [HttpGet]
     [Route("RestartProduct")]
@@ -82,7 +60,24 @@ public class ProductController : ControllerBase
     {
         var httpResponse = await http.GetStringAsync(ServicesURL.Product("postRestart"));
 
-        return Ok("O carrinho não possui mais produtos!");
+        return Ok(ResourceExceptionsProducts.CARRINHO_VAZIO);
+    }
+    
+
+    [HttpPost]
+    [Route("Post")]
+    [ProducesResponseType(typeof(ResponsePostProduct), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Post(
+        [FromServices] HttpClient http,
+        [FromBody] RequestPostProduct request)
+    {
+        string Token = SaveResponse.GetUserToken();
+        var response = await HttpResponseHandler.PostAsync<ResponsePostOrder>(http, ServicesURL.Product("post", TakeIdJwt.GetUserIdFromToken(Token)), request);
+        if (response == null)
+            return BadRequest("");
+
+        return Created("", response);
     }
 
     [HttpPut]
@@ -94,20 +89,12 @@ public class ProductController : ControllerBase
         [FromBody] RequestPostProduct request,
         [FromHeader] int id)
     {
-        string Token = SaveResponse.GetUserToken();
-        string userID = TakeIdJwt.GetUserIdFromToken(Token);
+        string token = SaveResponse.GetUserToken();
+        var response = await HttpResponseHandler.PutAsync<ResponsePostOrder>(http, ServicesURL.Product("update", id, TakeIdJwt.GetUserIdFromToken(token)), request);
+        if (response == null)
+            return BadRequest("");
 
-        var httpResponse = await http.PutAsJsonAsync(ServicesURL.Product("update", id, userID), request);
-
-        if (httpResponse.IsSuccessStatusCode)
-        {
-            var responseContent = await httpResponse.Content.ReadAsStringAsync();
-            var response = JsonConvert.DeserializeObject<ResponsePostOrder>(responseContent);
-
-            return Ok(response);
-        }
-
-        return NoContent();
+        return Ok(response);
     }
 
     [HttpDelete]
@@ -118,14 +105,11 @@ public class ProductController : ControllerBase
         [FromServices] HttpClient http,
         [FromHeader] int id)
     {
-        var httpResponse = await http.DeleteAsync(ServicesURL.Product("delete", id));
+        var response = await HttpResponseHandler.DeleteAsync(http, ServicesURL.Product("delete", id));
+        if (response == null)
+            return BadRequest();
 
-        if (httpResponse.IsSuccessStatusCode)
-        {
-            return Ok();
-        }
-
-        return NoContent();
+        return Ok();
     }
 
 }

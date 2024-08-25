@@ -2,8 +2,9 @@
 using Newtonsoft.Json;
 using PayMart.Application.Core.NovaPasta;
 using PayMart.Application.Core.Utilities;
+using PayMart.Domain.Core.Exception.ResourceExceptions;
+using PayMart.Domain.Core.NovaPasta.NovaPasta;
 using PayMart.Domain.Core.Request.Order;
-using PayMart.Domain.Core.Response.Login;
 using PayMart.Domain.Core.Response.Order;
 using PayMart.Infrastructure.Core.Services;
 
@@ -15,7 +16,7 @@ public class OrdersController : ControllerBase
 {
     [HttpGet]
     [Route("GetAll")]
-    [ProducesResponseType(typeof(ResponsePostOrder), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAll(
        [FromServices] HttpClient http)
@@ -27,12 +28,12 @@ public class OrdersController : ControllerBase
             return Ok(JsonFormatter.Formatter(httpResponse));
         }
 
-        return BadRequest();
+        return BadRequest(ResourceExceptionsOrder.ERRO_NAO_POSSUI_ORDER);
     }
 
     [HttpGet]
     [Route("GetID")]
-    [ProducesResponseType(typeof(ResponsePostOrder), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetID(
         [FromServices] HttpClient http,
@@ -45,35 +46,26 @@ public class OrdersController : ControllerBase
             return Ok(JsonFormatter.Formatter(httpResponse));
         }
 
-        return BadRequest();
+        return BadRequest(ResourceExceptionsOrder.ERRO_NAO_POSSUI_ORDER);
     }
 
     [HttpPost]
     [Route("Post")]
-    [ProducesResponseType(typeof(ResponsePostOrder), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Post(
         [FromServices] HttpClient http,
         [FromBody] RequestPostOrder request)
     {
         string Token = SaveResponse.GetUserToken();
-        string userID = TakeIdJwt.GetUserIdFromToken(Token);
-        var httpResponse = await http.PostAsJsonAsync(ServicesURL.Order("post", userID), request);
+        var response = await HttpResponseHandler.PostAsync<ResponsePostOrder>(http, ServicesURL.Order("post", TakeIdJwt.GetUserIdFromToken(Token)), request);
+        if (response == null)
+            return BadRequest(ResourceExceptionsOrder.ERRO_PEDIDO_JA_CRIADO);
 
-        if (httpResponse.IsSuccessStatusCode)
-        {
-            var responseContent = await httpResponse.Content.ReadAsStringAsync();
-            var response = JsonConvert.DeserializeObject<ResponsePostOrder>(responseContent);
+        SaveResponse.SaveOrderId(response.id);
+        return Created("", ResourceExceptionsOrder.PEDIDO_CRIADO.Replace("#name", $"{response.Name}"));
 
-            var httpSum = await http.GetStringAsync(ServicesURL.Product("getSumProducts", response!.ProductID));
 
-            SaveResponse.SavePrice(httpSum);
-            SaveResponse.SaveOrderId(response.id);
-
-            return Created("", response);
-        }
-
-        return NoContent();
     }
 
     [HttpPut]
@@ -85,19 +77,12 @@ public class OrdersController : ControllerBase
         [FromBody] RequestPostOrder request,
         [FromHeader] int id)
     {
-        string Token = SaveResponse.GetUserToken();
-        string userID = TakeIdJwt.GetUserIdFromToken(Token);
-        var httpResponse = await http.PutAsJsonAsync(ServicesURL.Order("update", id, userID), request);
+        string token = SaveResponse.GetUserToken();
+        var response = await HttpResponseHandler.PutAsync<ResponsePostOrder>(http, ServicesURL.Order("update", id, TakeIdJwt.GetUserIdFromToken(token)), request);
+        if (response == null)
+            return BadRequest(ResourceExceptionsOrder.ERRO_PEDIDO_JA_CRIADO);
 
-        if (httpResponse.IsSuccessStatusCode)
-        {
-            var responseContent = await httpResponse.Content.ReadAsStringAsync();
-            var response = JsonConvert.DeserializeObject<ResponsePostOrder>(responseContent);
-
-            return Ok(response);
-        }
-
-        return NoContent();
+        return Ok(response);
     }
 
     [HttpDelete]
@@ -108,10 +93,10 @@ public class OrdersController : ControllerBase
         [FromServices] HttpClient http,
         [FromHeader] int id)
     {
-        var httpResponse = await http.DeleteAsync(ServicesURL.Order("delete", id));
+        var response = await HttpResponseHandler.DeleteAsync(http, ServicesURL.Order("delete", id));
+        if (response == null)
+            return BadRequest();
 
-        if (httpResponse.IsSuccessStatusCode)
-            return Ok();
-        return NoContent();
+        return Ok();
     }
 }

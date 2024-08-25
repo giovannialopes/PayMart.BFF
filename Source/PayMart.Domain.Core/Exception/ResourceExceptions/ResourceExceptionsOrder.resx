@@ -117,15 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CRIACAO_DE_USUARIO" xml:space="preserve">
-    <value>Úsuario criado com sucesso!</value>
+  <data name="ERRO_NAO_POSSUI_ORDER" xml:space="preserve">
+    <value>Não foi possível encontrar pedidos.</value>
   </data>
-  <data name="ERRO_EMAIL_EXISTENTE" xml:space="preserve">
-    <value>Email já existente. </value>
+  <data name="ERRO_PEDIDO_JA_CRIADO" xml:space="preserve">
+    <value>Esse pedido ja foi criado.</value>
   </data>
-  <data name="ERRO_USUARIO_NAO_ENCONTRADO" xml:space="preserve">
-    <value>Usuario não encontrado!
-
-Email ou senha inválido.</value>
+  <data name="PEDIDO_CRIADO" xml:space="preserve">
+    <value>O Pedido com o Nome #name foi criado com sucesso!</value>
   </data>
 </root>

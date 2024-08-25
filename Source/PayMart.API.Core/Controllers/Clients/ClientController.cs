@@ -92,12 +92,11 @@ public class ClientController : ControllerBase
         [FromServices] HttpClient http,
         [FromHeader] int id)
     {
-        var httpResponse = await http.DeleteAsync(ServicesURL.Client("delete", id));
+        var response = await HttpResponseHandler.DeleteAsync(http, ServicesURL.Client("delete", id));
+        if (response == null)
+            return BadRequest();
 
-        if (httpResponse.IsSuccessStatusCode)
-            return Ok();
-
-        return NoContent();
+        return Ok();
 
     }
 
