@@ -18,7 +18,7 @@ public class ProductController : ControllerBase
 {
     [HttpGet]
     [Route("GetAll")]
-    [ProducesResponseType(typeof(ResponsePostProduct), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> GetAll(
         [FromServices] HttpClient http)
@@ -35,7 +35,7 @@ public class ProductController : ControllerBase
 
     [HttpGet]
     [Route("GetID")]
-    [ProducesResponseType(typeof(ResponsePostProduct), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> GetID(
         [FromServices] HttpClient http,
@@ -51,7 +51,6 @@ public class ProductController : ControllerBase
         return NoContent();
     }
 
-
     [HttpGet]
     [Route("RestartProduct")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -63,10 +62,9 @@ public class ProductController : ControllerBase
         return Ok(ResourceExceptionsProducts.CARRINHO_VAZIO);
     }
     
-
     [HttpPost]
     [Route("Post")]
-    [ProducesResponseType(typeof(ResponsePostProduct), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Post(
         [FromServices] HttpClient http,
@@ -82,7 +80,7 @@ public class ProductController : ControllerBase
 
     [HttpPut]
     [Route("Update")]
-    [ProducesResponseType(typeof(ResponsePostProduct), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Update(
         [FromServices] HttpClient http,
@@ -99,7 +97,7 @@ public class ProductController : ControllerBase
 
     [HttpDelete]
     [Route("Delete")]
-    [ProducesResponseType(typeof(ResponsePostProduct), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Delete(
         [FromServices] HttpClient http,
