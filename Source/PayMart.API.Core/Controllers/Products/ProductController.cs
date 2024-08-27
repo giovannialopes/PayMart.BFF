@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PayMart.Application.Core.NovaPasta;
@@ -14,6 +15,8 @@ namespace PayMart.API.Core.Controllers.Products;
 
 [Route("api/[Controller]")]
 [ApiController]
+[Authorize]
+
 public class ProductController : ControllerBase
 {
     [HttpGet]

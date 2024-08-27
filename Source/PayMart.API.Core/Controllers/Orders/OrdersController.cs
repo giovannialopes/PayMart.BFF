@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PayMart.Application.Core.NovaPasta;
 using PayMart.Application.Core.Utilities;
@@ -12,6 +13,8 @@ namespace PayMart.API.Core.Controllers.Orders;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
+
 public class OrdersController : ControllerBase
 {
     [HttpGet]
@@ -70,7 +73,7 @@ public class OrdersController : ControllerBase
 
     [HttpPut]
     [Route("Update")]
-    [ProducesResponseType(typeof(ResponsePostOrder), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Update(
         [FromServices] HttpClient http,
@@ -87,7 +90,7 @@ public class OrdersController : ControllerBase
 
     [HttpDelete]
     [Route("Delete")]
-    [ProducesResponseType(typeof(ResponsePostOrder), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Delete(
         [FromServices] HttpClient http,

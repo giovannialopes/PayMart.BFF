@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PayMart.Application.Core.Utilities;
+using PayMart.Domain.Core.Exception.ResourceExceptions;
+using PayMart.Domain.Core.NovaPasta.NovaPasta;
 using PayMart.Domain.Core.Request.Payment;
 using PayMart.Domain.Core.Response.Payment;
 using PayMart.Infrastructure.Core.Services;
@@ -9,12 +12,14 @@ namespace PayMart.API.Core.Controllers.Payment;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
+
 public class PaymentController : ControllerBase
 {
     [HttpPost]
     [Route("Post")]
-    [ProducesResponseType(typeof(ResponsePostPayment), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Post(
     [FromServices] HttpClient http,
     [FromBody] RequestPostPayment request)
@@ -22,16 +27,10 @@ public class PaymentController : ControllerBase
         string price = SaveResponse.GetPrice();
         int productID = SaveResponse.GetOrderId();
 
-        var httpResponse = await http.PostAsJsonAsync(ServicesURL.Payment("post", price, productID), request);
+        var response = await HttpResponseHandler.PostAsync<ResponsePostClient>(http, ServicesURL.Payment("post", price, productID), request);
+        if (response == null)
+            return BadRequest(ResourceExceptionsPayment.ERRO_PAGAMENTO_INVALIDO);
 
-        if (httpResponse.IsSuccessStatusCode)
-        {
-            var responseContent = await httpResponse.Content.ReadAsStringAsync();
-            var response = JsonConvert.DeserializeObject<ResponsePostPayment>(responseContent);
-
-            return Created("", response);
-        }
-
-        return NoContent();
+        return Created("", response);
     }
 }

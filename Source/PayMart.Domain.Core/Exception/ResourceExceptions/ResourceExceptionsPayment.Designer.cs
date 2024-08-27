@@ -59,5 +59,14 @@ namespace PayMart.Domain.Core.Exception.ResourceExceptions {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Pagamento Inválido..
+        /// </summary>
+        public static string ERRO_PAGAMENTO_INVALIDO {
+            get {
+                return ResourceManager.GetString("ERRO_PAGAMENTO_INVALIDO", resourceCulture);
+            }
+        }
     }
 }
