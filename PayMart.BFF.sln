@@ -15,6 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PayMart.Infrastructure.Core
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PayMart.Domain.Core", "Source\PayMart.Domain.Core\PayMart.Domain.Core.csproj", "{438A4EF5-9E79-4D04-B0BB-9999D0E55A1C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoginValidator.Tests", "LoginValidator.Tests\LoginValidator.Tests.csproj", "{43C546B9-332E-40F5-83BA-467F488AD3E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientValidator.Tests", "ClientValidator.Tests\ClientValidator.Tests.csproj", "{E2C7C5C7-37BD-4D59-B49A-5DC6EA8619E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +41,14 @@ Global
 		{438A4EF5-9E79-4D04-B0BB-9999D0E55A1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{438A4EF5-9E79-4D04-B0BB-9999D0E55A1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{438A4EF5-9E79-4D04-B0BB-9999D0E55A1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43C546B9-332E-40F5-83BA-467F488AD3E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43C546B9-332E-40F5-83BA-467F488AD3E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43C546B9-332E-40F5-83BA-467F488AD3E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43C546B9-332E-40F5-83BA-467F488AD3E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2C7C5C7-37BD-4D59-B49A-5DC6EA8619E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2C7C5C7-37BD-4D59-B49A-5DC6EA8619E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2C7C5C7-37BD-4D59-B49A-5DC6EA8619E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2C7C5C7-37BD-4D59-B49A-5DC6EA8619E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +58,8 @@ Global
 		{430A0C29-4B8B-4ED8-BAD4-05A3A3D9B980} = {2C21DB5E-C72E-45D2-8E45-53357394A94C}
 		{36C536C6-B192-485D-AD15-5DBDEC65F32F} = {2C21DB5E-C72E-45D2-8E45-53357394A94C}
 		{438A4EF5-9E79-4D04-B0BB-9999D0E55A1C} = {2C21DB5E-C72E-45D2-8E45-53357394A94C}
+		{43C546B9-332E-40F5-83BA-467F488AD3E4} = {251CA96F-E5D5-4655-9876-068CE61F36EF}
+		{E2C7C5C7-37BD-4D59-B49A-5DC6EA8619E4} = {251CA96F-E5D5-4655-9876-068CE61F36EF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C3F81DC3-C2A3-4A06-A3F4-A63633F24A2A}

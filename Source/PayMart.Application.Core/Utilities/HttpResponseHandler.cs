@@ -6,7 +6,7 @@ namespace PayMart.Application.Core.Utilities;
 
 public class HttpResponseHandler
 {
-    public static async Task<T> HandleResponseAsync<T>(HttpResponseMessage httpResponse) where T : class, new()
+    public static async Task<T?> HandleResponseAsync<T>(HttpResponseMessage httpResponse) where T : class, new()
     {
         var responseContent = await httpResponse.Content.ReadAsStringAsync();
 
@@ -16,16 +16,16 @@ public class HttpResponseHandler
             return response!;
         }
 
-        return null;
+        return default;
     }
 
-    public static async Task<T> PostAsync<T>(HttpClient httpClient, string url, object request) where T : class, new()
+    public static async Task<T?> PostAsync<T>(HttpClient httpClient, string url, object request) where T : class, new()
     {
         var httpResponse = await httpClient.PostAsJsonAsync(url, request);
         return await HandleResponseAsync<T>(httpResponse);
     }
 
-    public static async Task<T> PutAsync<T>(HttpClient httpClient, string url, object request) where T : class, new()
+    public static async Task<T?> PutAsync<T>(HttpClient httpClient, string url, object request) where T : class, new()
     {
         var httpResponse = await httpClient.PutAsJsonAsync(url, request);
         return await HandleResponseAsync<T>(httpResponse);

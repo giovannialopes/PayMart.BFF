@@ -5,22 +5,25 @@ using PayMart.Domain.Core.NovaPasta.NovaPasta;
 using PayMart.Domain.Core.Request.Login;
 using PayMart.Domain.Core.Response.Login;
 using PayMart.Infrastructure.Core.Services;
+using System.Net.Http;
+using System;
+using Newtonsoft.Json;
 
 namespace PayMart.API.Core.Controllers.Login;
 
 [Route("api/[controller]")]
 [ApiController]
-public class LoginController : ControllerBase
+public class LoginController(HttpClient httpClient) : ControllerBase
 {
     [HttpPost]
     [Route("GetUser")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetUser(
-        [FromServices] HttpClient http,
         [FromBody] RequestGetUserLogin request)
     {
-        var response = await HttpResponseHandler.PostAsync<ResponsePostLogin>(http, ServicesURL.Login("getUser"), request);
+        var response = await HttpResponseHandler.PostAsync<ResponsePostLogin>(httpClient, ServicesURL.Login("getUser"), request);
+
         if (response == null)
             return BadRequest(ResourceExceptionsLogin.ERRO_USUARIO_NAO_ENCONTRADO);
 
@@ -33,14 +36,12 @@ public class LoginController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RegisterUser(
-        [FromServices] HttpClient http,
         [FromBody] RequestRegisterUserLogin request)
     {
-        var response = await HttpResponseHandler.PostAsync<ResponsePostLogin>(http, ServicesURL.Login("registerUser"), request);
+        var response = await HttpResponseHandler.PostAsync<ResponsePostLogin>(httpClient, ServicesURL.Login("registerUser"), request);
         if (response == null)
             return BadRequest(ResourceExceptionsLogin.ERRO_EMAIL_EXISTENTE);
 
-        var createCLient = await HttpResponseHandler.PostAsync<ResponsePostClient>(http, ServicesURL.Client("post", TakeIdJwt.GetUserIdFromToken(response.Token)), request);
         return Created("", ResourceExceptionsLogin.CRIACAO_DE_USUARIO);
     }
 }

@@ -15,16 +15,15 @@ namespace PayMart.API.Core.Controllers.Clients;
 [Route("api/[Controller]")]
 [ApiController]
 [Authorize]
-public class ClientController : ControllerBase
+public class ClientController(HttpClient httpClient) : ControllerBase
 {
     [HttpGet]
     [Route("GetAll")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetAllClient(
-        [FromServices] HttpClient http)
+    public async Task<IActionResult> GetAllClient()
     {
-        var httpResponse = await http.GetStringAsync(ServicesURL.Client("getAll"));
+        var httpResponse = await httpClient.GetStringAsync(ServicesURL.Client("getAll"));
 
         if (string.IsNullOrEmpty(httpResponse) == false)
         {
@@ -39,10 +38,9 @@ public class ClientController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetIDClient(
-        [FromServices] HttpClient http,
         [FromHeader] int id)
         {
-        var httpResponse = await http.GetStringAsync(ServicesURL.Client("getID", id));
+        var httpResponse = await httpClient.GetStringAsync(ServicesURL.Client("getID", id));
 
         if (string.IsNullOrEmpty(httpResponse) == false)
         {
@@ -58,11 +56,10 @@ public class ClientController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> PostClient(
-        [FromServices] HttpClient http,
         [FromBody] RequestPostClient request)
     {
         string Token = SaveResponse.GetUserToken();
-        var response = await HttpResponseHandler.PostAsync<ResponsePostClient>(http, ServicesURL.Client("post", TakeIdJwt.GetUserIdFromToken(Token)), request);
+        var response = await HttpResponseHandler.PostAsync<ResponsePostClient>(httpClient, ServicesURL.Client("post", TakeIdJwt.GetUserIdFromToken(Token)), request);
         if (response == null)
             return BadRequest(ResourceExceptionsClient.ERRO_EMAIL_REGISTRADO);
 
@@ -74,11 +71,10 @@ public class ClientController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateClient(int id,
-        [FromServices] HttpClient http,
         [FromBody] RequestPostClient request)
     {
         string token = SaveResponse.GetUserToken();
-        var response = await HttpResponseHandler.PutAsync<ResponsePostClient>(http, ServicesURL.Client("update", id, TakeIdJwt.GetUserIdFromToken(token)), request);
+        var response = await HttpResponseHandler.PutAsync<ResponsePostClient>(httpClient, ServicesURL.Client("update", id, TakeIdJwt.GetUserIdFromToken(token)), request);
         if (response == null)
             return BadRequest(ResourceExceptionsClient.ERRO_EMAIL_REGISTRADO);
 
@@ -90,12 +86,9 @@ public class ClientController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Delete(
-        [FromServices] HttpClient http,
         [FromHeader] int id)
     {
-        var deleteLogin = await HttpResponseHandler.DeleteAsync(http, ServicesURL.Login("delete", id));
-        var response = await HttpResponseHandler.DeleteAsync(http, ServicesURL.Client("delete", id));
-
+        var response = await HttpResponseHandler.DeleteAsync(httpClient, ServicesURL.Login("delete", id));
         if (response == null)
             return BadRequest(ResourceExceptionsClient.ERRO_NAO_POSSUI_CLIENTE);
 
