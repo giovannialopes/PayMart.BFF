@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Login\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Exception\ResourceExceptions\ResourceExceptionsClient.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

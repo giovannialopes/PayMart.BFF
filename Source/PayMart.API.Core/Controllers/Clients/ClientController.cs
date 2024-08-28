@@ -27,7 +27,8 @@ public class ClientController(HttpClient httpClient) : ControllerBase
 
         if (string.IsNullOrEmpty(httpResponse) == false)
         {
-            return Ok(JsonFormatter.Formatter(httpResponse));
+            var a = JsonFormatter.Formatter(httpResponse);
+            return Ok(a);
         }
 
         return BadRequest(ResourceExceptionsClient.ERRO_NAO_POSSUI_CLIENTE);
