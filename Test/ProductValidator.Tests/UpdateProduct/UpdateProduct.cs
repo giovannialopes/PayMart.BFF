@@ -1,17 +1,14 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Moq.Protected;
 using Moq;
+using Moq.Protected;
 using Newtonsoft.Json;
-using PayMart.API.Core.Controllers.Clients;
-using PayMart.Application.Core.Utilities;
-using PayMart.Domain.Core.Exception.ResourceExceptions;
-using PayMart.Domain.Core.NovaPasta.NovaPasta;
-using PayMart.Domain.Core.Request.Client;
-using System.Net;
 using PayMart.API.Core.Controllers.Products;
+using PayMart.API.Core.Utilities;
+using PayMart.Domain.Core.Exception.ResourceExceptions;
 using PayMart.Domain.Core.Request.Product;
 using PayMart.Domain.Core.Response.Product;
+using System.Net;
 
 namespace ProductValidator.Tests.UpdateProduct;
 

@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PayMart.Application.Core.Utilities;
+using PayMart.API.Core.Utilities;
 using PayMart.Domain.Core.Exception.ResourceExceptions;
-using PayMart.Domain.Core.NovaPasta.NovaPasta;
 using PayMart.Domain.Core.Request.Login;
 using PayMart.Domain.Core.Response.Login;
 using PayMart.Infrastructure.Core.Services;
-using System.Net.Http;
-using System;
-using Newtonsoft.Json;
 
 namespace PayMart.API.Core.Controllers.Login;
 

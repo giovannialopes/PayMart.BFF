@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-
-namespace PayMart.Application.Core.Utilities;
+﻿namespace PayMart.API.Core.Utilities;
 
 public class SaveResponse
 {

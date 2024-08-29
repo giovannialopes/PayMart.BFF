@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using PayMart.Application.Core.NovaPasta;
-using PayMart.Application.Core.Utilities;
+using PayMart.API.Core.Utilities;
 using PayMart.Domain.Core.Exception.ResourceExceptions;
-using PayMart.Domain.Core.NovaPasta.NovaPasta;
 using PayMart.Domain.Core.Request.Order;
 using PayMart.Domain.Core.Response.Order;
 using PayMart.Infrastructure.Core.Services;

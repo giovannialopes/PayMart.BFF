@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace PayMart.Application.Core.NovaPasta;
+namespace PayMart.API.Core.Utilities;
 
 public class JsonFormatter
 {

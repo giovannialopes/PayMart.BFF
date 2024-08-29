@@ -3,22 +3,25 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Moq.Protected;
 using Newtonsoft.Json;
-using PayMart.API.Core.Controllers.Orders;
+using PayMart.API.Core.Controllers.Payment;
+using PayMart.API.Core.Controllers.Products;
 using PayMart.API.Core.Utilities;
 using PayMart.Domain.Core.Exception.ResourceExceptions;
-using PayMart.Domain.Core.Request.Order;
-using PayMart.Domain.Core.Response.Order;
+using PayMart.Domain.Core.Request.Payment;
+using PayMart.Domain.Core.Request.Product;
+using PayMart.Domain.Core.Response.Payment;
+using PayMart.Domain.Core.Response.Product;
 using System.Net;
 
-namespace OrderValidator.Tests.RegisterOrder;
+namespace PaymentValidator.Tests.RegisterPayment;
 
-public class RegisterOrder
+public class RegisterPayment
 {
     [Fact]
-    public async Task RegisterOrderSucess()
+    public async Task RegisterProductSucess()
     {
         var handlerMock = new Mock<HttpMessageHandler>();
-        var expectedResponse = new ResponsePostOrder { Name = "teste", Date = DateTime.UtcNow };
+        var expectedResponse = new ResponsePostPayment { PaymentType = "4", DateTime = DateTime.UtcNow, Price = 12 };
         var jsonResponse = JsonConvert.SerializeObject(expectedResponse);
 
         handlerMock
@@ -36,27 +39,28 @@ public class RegisterOrder
 
 
         var httpClient = new HttpClient(handlerMock.Object);
-        var controller = new OrdersController(httpClient);
-        var request = new RequestPostOrder
+        var controller = new PaymentController(httpClient);
+        var request = new RequestPostPayment
         {
-            ProductID = 1,
-            Name = "test",          
+            PaymentType = 4
         };
         SaveResponse.SaveUserToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.gmsqCPG8I7VH7txA7OxcrsIedHUJrQCLqq9HYz3TlLk");
+        SaveResponse.SaveOrderId(1);
 
         // Act
-        var result = await controller.PostOrder(request);
+        var result = await controller.PostPayment(request);
 
         // Assert
         var createdResult = result.Should().BeOfType<CreatedResult>().Subject;
-        var actualContent = createdResult.StatusCode;
+        var actualContent = createdResult.Value as ResponsePostPayment;
+        actualContent.Should().BeEquivalentTo(expectedResponse);
     }
 
     [Fact]
-    public async Task RegisterOrderError()
+    public async Task RegisterClientError()
     {
         var handlerMock = new Mock<HttpMessageHandler>();
-        var expectedResponse = new ResponsePostOrder { Name = "teste", Date = DateTime.UtcNow };
+        var expectedResponse = new ResponsePostPayment { PaymentType = "4", DateTime = DateTime.UtcNow, Price = 12 };
         var jsonResponse = JsonConvert.SerializeObject(expectedResponse);
 
         handlerMock
@@ -74,21 +78,20 @@ public class RegisterOrder
 
 
         var httpClient = new HttpClient(handlerMock.Object);
-        var controller = new OrdersController(httpClient);
-        var request = new RequestPostOrder
+        var controller = new PaymentController(httpClient);
+        var request = new RequestPostPayment
         {
-            ProductID = 1,
-            Name = "test",
+            PaymentType = 4
         };
+        SaveResponse.SaveUserToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.gmsqCPG8I7VH7txA7OxcrsIedHUJrQCLqq9HYz3TlLk");
+        SaveResponse.SaveOrderId(1);
 
         // Act
-        SaveResponse.SaveUserToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.gmsqCPG8I7VH7txA7OxcrsIedHUJrQCLqq9HYz3TlLk");
-        var result = await controller.PostOrder(request);
+        var result = await controller.PostPayment(request);
 
         // Assert
         var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Subject;
         var actualContent = badRequestResult.Value as string;
-        actualContent.Should().BeEquivalentTo(ResourceExceptionsOrder.ERRO_PEDIDO_JA_CRIADO);
+        actualContent.Should().BeEquivalentTo(ResourceExceptionsPayment.ERRO_PAGAMENTO_INVALIDO);
     }
-
 }

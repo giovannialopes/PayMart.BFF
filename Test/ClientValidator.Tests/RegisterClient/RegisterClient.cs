@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Moq.Protected;
 using Moq;
+using Moq.Protected;
 using Newtonsoft.Json;
 using PayMart.API.Core.Controllers.Clients;
-using PayMart.Application.Core.Utilities;
+using PayMart.API.Core.Utilities;
 using PayMart.Domain.Core.Exception.ResourceExceptions;
 using PayMart.Domain.Core.NovaPasta.NovaPasta;
 using PayMart.Domain.Core.Request.Client;

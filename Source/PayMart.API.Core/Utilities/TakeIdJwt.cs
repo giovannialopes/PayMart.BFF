@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PayMart.Application.Core.Utilities;
+namespace PayMart.API.Core.Utilities;
 
 public static class TakeIdJwt
 {

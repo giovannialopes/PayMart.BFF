@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
-using System.Net.Http.Json;
-using static PayMart.Application.Core.Utilities.HttpResponseHandler;
 
-namespace PayMart.Application.Core.Utilities;
+namespace PayMart.API.Core.Utilities;
 
 public class HttpResponseHandler
 {
@@ -39,7 +37,7 @@ public class HttpResponseHandler
         if (responseContent != "")
             return "Ok";
     
-        return null;
+        return default;
     }
 
 }
