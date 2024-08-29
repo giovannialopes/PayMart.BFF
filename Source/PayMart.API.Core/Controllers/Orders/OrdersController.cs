@@ -15,14 +15,13 @@ namespace PayMart.API.Core.Controllers.Orders;
 [ApiController]
 [Authorize]
 
-public class OrdersController : ControllerBase
+public class OrdersController(HttpClient http) : ControllerBase
 {
     [HttpGet]
     [Route("GetAll")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetAll(
-       [FromServices] HttpClient http)
+    public async Task<IActionResult> GetAllOrder()
     {
         var httpResponse = await http.GetStringAsync(ServicesURL.Order("getAll"));
 
@@ -38,8 +37,7 @@ public class OrdersController : ControllerBase
     [Route("GetID")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetID(
-        [FromServices] HttpClient http,
+    public async Task<IActionResult> GetIDOrder(
         [FromHeader] int id)
     {
         var httpResponse = await http.GetStringAsync(ServicesURL.Order("getID", id));
@@ -56,8 +54,7 @@ public class OrdersController : ControllerBase
     [Route("Post")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Post(
-        [FromServices] HttpClient http,
+    public async Task<IActionResult> PostOrder(
         [FromBody] RequestPostOrder request)
     {
         string Token = SaveResponse.GetUserToken();
@@ -67,16 +64,13 @@ public class OrdersController : ControllerBase
 
         SaveResponse.SaveOrderId(response.id);
         return Created("", ResourceExceptionsOrder.PEDIDO_CRIADO.Replace("#name", $"{response.Name}"));
-
-
     }
 
     [HttpPut]
     [Route("Update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> Update(
-        [FromServices] HttpClient http,
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateOrder(
         [FromBody] RequestPostOrder request,
         [FromHeader] int id)
     {
@@ -91,14 +85,13 @@ public class OrdersController : ControllerBase
     [HttpDelete]
     [Route("Delete")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> Delete(
-        [FromServices] HttpClient http,
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> DeleteOrder(
         [FromHeader] int id)
     {
         var response = await HttpResponseHandler.DeleteAsync(http, ServicesURL.Order("delete", id));
         if (response == null)
-            return BadRequest();
+            return BadRequest(ResourceExceptionsOrder.ERRO_NAO_POSSUI_ORDER);
 
         return Ok();
     }

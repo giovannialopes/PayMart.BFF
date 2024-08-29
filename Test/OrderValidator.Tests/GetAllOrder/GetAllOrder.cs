@@ -3,23 +3,24 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Moq.Protected;
 using Newtonsoft.Json;
-using PayMart.API.Core.Controllers.Clients;
-using PayMart.API.Core.Controllers.Products;
+using PayMart.API.Core.Controllers.Orders;
 using PayMart.Domain.Core.Exception.ResourceExceptions;
-using PayMart.Domain.Core.NovaPasta.NovaPasta;
-using PayMart.Domain.Core.Response.Product;
+using PayMart.Domain.Core.Response.Order;
 using System.Net;
 
-namespace ProductValidator.Tests.GetProductByID;
+namespace OrderValidator.Tests.GetAllOrder;
 
-public class GetProductByID
+public class GetAllOrder
 {
     [Fact]
-    public async Task GetProductByIDSucess()
+    public async Task GetAllOrderSucess()
     {
         // Arrange
         var handlerMock = new Mock<HttpMessageHandler>();
-        var expectedResponse = new ResponsePostProduct { Name = "teste", Description = "o teste é rapido", Price = 12 };
+        var expectedResponse = new List<ResponsePostOrder>
+    {
+        new ResponsePostOrder { Name = "teste", Date = DateTime.UtcNow }
+    };
 
         var jsonResponse = JsonConvert.SerializeObject(expectedResponse);
 
@@ -36,26 +37,28 @@ public class GetProductByID
             });
 
         var httpClient = new HttpClient(handlerMock.Object);
-        var controller = new ProductController(httpClient);
-        int id = 1;
+        var controller = new OrdersController(httpClient);
 
         // Act
-        var result = await controller.GetID(id);
+        var result = await controller.GetAllOrder();
 
         // Assert
         var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
         var actualContent = okResult.Value as string;
-        var actualResponse = JsonConvert.DeserializeObject<ResponsePostProduct>(actualContent!);
+        var actualResponse = JsonConvert.DeserializeObject<List<ResponsePostOrder>>(actualContent!);
 
         actualResponse.Should().BeEquivalentTo(expectedResponse);
     }
 
     [Fact]
-    public async Task GetProductByIDError()
+    public async Task GetAllOrderError()
     {
         // Arrange
         var handlerMock = new Mock<HttpMessageHandler>();
-        var expectedResponse = new ResponsePostProduct { Name = "teste", Description = "o teste é rapido", Price = 12 };
+        var expectedResponse = new List<ResponsePostOrder>
+    {
+        new ResponsePostOrder { Name = "teste", Date = DateTime.UtcNow }
+    };
 
         var jsonResponse = JsonConvert.SerializeObject(expectedResponse);
 
@@ -72,17 +75,14 @@ public class GetProductByID
             });
 
         var httpClient = new HttpClient(handlerMock.Object);
-        var controller = new ProductController(httpClient);
-        int id = 1;
+        var controller = new OrdersController(httpClient);
 
         // Act
-        var result = await controller.GetID(id);
+        var result = await controller.GetAllOrder();
 
         // Assert
         var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Subject;
         var actualContent = badRequestResult.Value as string;
-        actualContent.Should().BeEquivalentTo(ResourceExceptionsProducts.PRODUTO_NAO_ENCONTRADO);
-
-
+        actualContent.Should().BeEquivalentTo(ResourceExceptionsOrder.ERRO_NAO_POSSUI_ORDER);
     }
 }

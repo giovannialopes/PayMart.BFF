@@ -1,24 +1,28 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Moq.Protected;
 using Moq;
+using Moq.Protected;
 using Newtonsoft.Json;
 using PayMart.API.Core.Controllers.Clients;
+using PayMart.API.Core.Controllers.Orders;
 using PayMart.Application.Core.Utilities;
 using PayMart.Domain.Core.Exception.ResourceExceptions;
 using PayMart.Domain.Core.NovaPasta.NovaPasta;
 using PayMart.Domain.Core.Request.Client;
+using PayMart.Domain.Core.Request.Order;
+using PayMart.Domain.Core.Response.Order;
 using System.Net;
 
-namespace ClientValidator.Tests.RegisterClient;
+namespace OrderValidator.Tests.RegisterOrder;
 
-public class RegisterClient
+public class RegisterOrder
 {
     [Fact]
-    public async Task RegisterClientSucess()
+    public async Task RegisterOrderSucess()
     {
         var handlerMock = new Mock<HttpMessageHandler>();
-        var expectedResponse = new ResponsePostClient { Name = "teste", Age = 0, Email = "teste@gmail.com" };
+        var expectedResponse = new ResponsePostOrder { Name = "teste", Date = DateTime.UtcNow };
         var jsonResponse = JsonConvert.SerializeObject(expectedResponse);
 
         handlerMock
@@ -36,33 +40,27 @@ public class RegisterClient
 
 
         var httpClient = new HttpClient(handlerMock.Object);
-        var controller = new ClientController(httpClient);
-        var request = new RequestPostClient
+        var controller = new OrdersController(httpClient);
+        var request = new RequestPostOrder
         {
-            Name = "test",
-            Email = "test@example.com",
-            Age = 0,
-            Address = "002",
-            PhoneNumber = "1234567890",
-            UserID = 1
-
+            ProductID = 1,
+            Name = "test",          
         };
+        SaveResponse.SaveUserToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.gmsqCPG8I7VH7txA7OxcrsIedHUJrQCLqq9HYz3TlLk");
 
         // Act
-        SaveResponse.SaveUserToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.gmsqCPG8I7VH7txA7OxcrsIedHUJrQCLqq9HYz3TlLk");
-        var result = await controller.PostClient(request);
+        var result = await controller.PostOrder(request);
 
         // Assert
         var createdResult = result.Should().BeOfType<CreatedResult>().Subject;
-        var actualContent = createdResult.Value as ResponsePostClient;
-        actualContent.Should().BeEquivalentTo(expectedResponse);
+        var actualContent = createdResult.StatusCode;
     }
 
     [Fact]
-    public async Task RegisterClientError()
+    public async Task RegisterOrderError()
     {
         var handlerMock = new Mock<HttpMessageHandler>();
-        var expectedResponse = new ResponsePostClient { Name = "teste", Age = 0, Email = "teste@gmail.com" };
+        var expectedResponse = new ResponsePostOrder { Name = "teste", Date = DateTime.UtcNow };
         var jsonResponse = JsonConvert.SerializeObject(expectedResponse);
 
         handlerMock
@@ -80,26 +78,21 @@ public class RegisterClient
 
 
         var httpClient = new HttpClient(handlerMock.Object);
-        var controller = new ClientController(httpClient);
-        var request = new RequestPostClient
+        var controller = new OrdersController(httpClient);
+        var request = new RequestPostOrder
         {
+            ProductID = 1,
             Name = "test",
-            Email = "test@example.com",
-            Age = 0,
-            Address = "002",
-            PhoneNumber = "1234567890",
-            UserID = 1
-
         };
 
         // Act
         SaveResponse.SaveUserToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.gmsqCPG8I7VH7txA7OxcrsIedHUJrQCLqq9HYz3TlLk");
-        var result = await controller.PostClient(request);
+        var result = await controller.PostOrder(request);
 
         // Assert
         var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Subject;
         var actualContent = badRequestResult.Value as string;
-        actualContent.Should().BeEquivalentTo(ResourceExceptionsClient.ERRO_EMAIL_REGISTRADO);
+        actualContent.Should().BeEquivalentTo(ResourceExceptionsOrder.ERRO_PEDIDO_JA_CRIADO);
     }
 
 }

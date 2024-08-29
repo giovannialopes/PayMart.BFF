@@ -1,35 +1,30 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Moq.Protected;
 using Moq;
+using Moq.Protected;
 using Newtonsoft.Json;
-using PayMart.API.Core.Controllers.Clients;
-using PayMart.Domain.Core.Exception.ResourceExceptions;
-using PayMart.Domain.Core.NovaPasta.NovaPasta;
-using System.Net;
-using PayMart.Domain.Core.Response.Product;
 using PayMart.API.Core.Controllers.Products;
+using PayMart.Domain.Core.Exception.ResourceExceptions;
+using PayMart.Domain.Core.Request.Client;
+using PayMart.Domain.Core.Response.Product;
+using System.Net;
 
-namespace ProductValidator.Tests.GetAllProduct;
+namespace ProductValidator.Tests.DeleteProduct;
 
-public class GetAllProduct
+public class DeleteProduct
 {
     [Fact]
-    public async Task GetAllProductSucess()
+    public async Task DeleteProductSucess()
     {
-        // Arrange
         var handlerMock = new Mock<HttpMessageHandler>();
-        var expectedResponse = new List<ResponsePostProduct>
-    {
-        new ResponsePostProduct { Name = "teste", Description = "o teste é rapido", Price = 12 }
-    };
-
+        var expectedResponse = new ResponsePostProduct { Name = "teste", Description = "o teste é rapido", Price = 12 };
         var jsonResponse = JsonConvert.SerializeObject(expectedResponse);
 
-        handlerMock.Protected()
+        handlerMock
+            .Protected()
             .Setup<Task<HttpResponseMessage>>(
                 "SendAsync",
-                ItExpr.Is<HttpRequestMessage>(req => req.Method == HttpMethod.Get),
+                ItExpr.Is<HttpRequestMessage>(req => req.Method == HttpMethod.Delete),
                 ItExpr.IsAny<CancellationToken>()
             )
             .ReturnsAsync(new HttpResponseMessage
@@ -38,36 +33,28 @@ public class GetAllProduct
                 Content = new StringContent(jsonResponse)
             });
 
+
         var httpClient = new HttpClient(handlerMock.Object);
         var controller = new ProductController(httpClient);
+        int id = 1;
 
         // Act
-        var result = await controller.GetAll();
+        var result = await controller.DeleteProduct(id);
 
         // Assert
-        var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
-        var actualContent = okResult.Value as string;
-        var actualResponse = JsonConvert.DeserializeObject<List<ResponsePostProduct>>(actualContent!);
-
-        actualResponse.Should().BeEquivalentTo(expectedResponse);
+        var okResult = result.Should().BeOfType<OkResult>().Subject;
+        var actualContent = okResult.StatusCode;
     }
 
     [Fact]
-    public async Task GetAllProductError()
+    public async Task DeleteProductError()
     {
-        // Arrange
         var handlerMock = new Mock<HttpMessageHandler>();
-        var expectedResponse = new List<ResponsePostProduct>
-    {
-        new ResponsePostProduct { Name = "teste", Description = "o teste é rapido", Price = 12 }
-    };
-
-        var jsonResponse = JsonConvert.SerializeObject(expectedResponse);
-
-        handlerMock.Protected()
+        handlerMock
+            .Protected()
             .Setup<Task<HttpResponseMessage>>(
                 "SendAsync",
-                ItExpr.Is<HttpRequestMessage>(req => req.Method == HttpMethod.Get),
+                ItExpr.Is<HttpRequestMessage>(req => req.Method == HttpMethod.Delete),
                 ItExpr.IsAny<CancellationToken>()
             )
             .ReturnsAsync(new HttpResponseMessage
@@ -76,11 +63,14 @@ public class GetAllProduct
                 Content = new StringContent(string.Empty)
             });
 
+
         var httpClient = new HttpClient(handlerMock.Object);
         var controller = new ProductController(httpClient);
+        int id = 1;
 
         // Act
-        var result = await controller.GetAll();
+        var result = await controller.DeleteProduct(id);
+
 
         // Assert
         var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Subject;

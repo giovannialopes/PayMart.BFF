@@ -50,7 +50,7 @@ public class RegisterProduct
         SaveResponse.SaveUserToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.gmsqCPG8I7VH7txA7OxcrsIedHUJrQCLqq9HYz3TlLk");
 
         // Act
-        var result = await controller.Post(request);
+        var result = await controller.PostProduct(request);
 
         // Assert
         var createdResult = result.Should().BeOfType<CreatedResult>().Subject;
@@ -91,7 +91,7 @@ public class RegisterProduct
         SaveResponse.SaveUserToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.gmsqCPG8I7VH7txA7OxcrsIedHUJrQCLqq9HYz3TlLk");
 
         // Act
-        var result = await controller.Post(request);
+        var result = await controller.PostProduct(request);
 
         // Assert
         var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Subject;

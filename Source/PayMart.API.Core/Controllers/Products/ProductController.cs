@@ -23,7 +23,7 @@ public class ProductController(HttpClient http) : ControllerBase
     [Route("GetAll")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAllProduct()
 
     {
         var httpResponse = await http.GetStringAsync(ServicesURL.Product("getAll"));
@@ -40,7 +40,7 @@ public class ProductController(HttpClient http) : ControllerBase
     [Route("GetID")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetID(
+    public async Task<IActionResult> GetIDProduct(
         [FromHeader] int id)
     {
         var httpResponse = await http.GetStringAsync(ServicesURL.Product("getID", id));
@@ -68,7 +68,7 @@ public class ProductController(HttpClient http) : ControllerBase
     [Route("Post")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Post(       
+    public async Task<IActionResult> PostProduct(       
         [FromBody] RequestPostProduct request)
     {
         string Token = SaveResponse.GetUserToken();
@@ -83,7 +83,7 @@ public class ProductController(HttpClient http) : ControllerBase
     [Route("Update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Update(
+    public async Task<IActionResult> UpdateProduct(
         [FromBody] RequestPostProduct request,
         [FromHeader] int id)
     {
@@ -99,7 +99,7 @@ public class ProductController(HttpClient http) : ControllerBase
     [Route("Delete")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Delete(
+    public async Task<IActionResult> DeleteProduct(
         [FromHeader] int id)
     {
         var response = await HttpResponseHandler.DeleteAsync(http, ServicesURL.Product("delete", id));
