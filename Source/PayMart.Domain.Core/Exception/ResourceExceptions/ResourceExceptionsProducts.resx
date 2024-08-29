@@ -120,4 +120,7 @@
   <data name="CARRINHO_VAZIO" xml:space="preserve">
     <value>O carrinho não possui mais nenhum produto.</value>
   </data>
+  <data name="PRODUTO_NAO_ENCONTRADO" xml:space="preserve">
+    <value>O produto não foi encontrado.</value>
+  </data>
 </root>

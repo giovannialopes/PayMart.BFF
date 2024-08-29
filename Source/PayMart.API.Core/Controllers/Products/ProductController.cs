@@ -17,14 +17,14 @@ namespace PayMart.API.Core.Controllers.Products;
 [ApiController]
 [Authorize]
 
-public class ProductController : ControllerBase
+public class ProductController(HttpClient http) : ControllerBase
 {
     [HttpGet]
     [Route("GetAll")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> GetAll(
-        [FromServices] HttpClient http)
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetAll()
+
     {
         var httpResponse = await http.GetStringAsync(ServicesURL.Product("getAll"));
 
@@ -33,15 +33,14 @@ public class ProductController : ControllerBase
             return Ok(JsonFormatter.Formatter(httpResponse));
         }
 
-        return NoContent();
+        return BadRequest(ResourceExceptionsProducts.PRODUTO_NAO_ENCONTRADO);
     }
 
     [HttpGet]
     [Route("GetID")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetID(
-        [FromServices] HttpClient http,
         [FromHeader] int id)
     {
         var httpResponse = await http.GetStringAsync(ServicesURL.Product("getID", id));
@@ -51,32 +50,31 @@ public class ProductController : ControllerBase
             return Ok(JsonFormatter.Formatter(httpResponse));
         }
 
-        return NoContent();
+        return BadRequest(ResourceExceptionsProducts.PRODUTO_NAO_ENCONTRADO);
+
     }
 
     [HttpGet]
     [Route("RestartProduct")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> RestartProduct(
-    [FromServices] HttpClient http)
+    public async Task<IActionResult> RestartProduct() 
     {
-        var httpResponse = await http.GetStringAsync(ServicesURL.Product("postRestart"));
+        var httpResponse = await http.GetStringAsync(ServicesURL.Product("restartProduct"));
 
         return Ok(ResourceExceptionsProducts.CARRINHO_VAZIO);
     }
-    
+
     [HttpPost]
     [Route("Post")]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> Post(
-        [FromServices] HttpClient http,
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Post(       
         [FromBody] RequestPostProduct request)
     {
         string Token = SaveResponse.GetUserToken();
-        var response = await HttpResponseHandler.PostAsync<ResponsePostOrder>(http, ServicesURL.Product("post", TakeIdJwt.GetUserIdFromToken(Token)), request);
+        var response = await HttpResponseHandler.PostAsync<ResponsePostProduct>(http, ServicesURL.Product("post", TakeIdJwt.GetUserIdFromToken(Token)), request);
         if (response == null)
-            return BadRequest("");
+            return BadRequest(ResourceExceptionsProducts.PRODUTO_NAO_ENCONTRADO);
 
         return Created("", response);
     }
@@ -84,16 +82,15 @@ public class ProductController : ControllerBase
     [HttpPut]
     [Route("Update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Update(
-        [FromServices] HttpClient http,
         [FromBody] RequestPostProduct request,
         [FromHeader] int id)
     {
         string token = SaveResponse.GetUserToken();
-        var response = await HttpResponseHandler.PutAsync<ResponsePostOrder>(http, ServicesURL.Product("update", id, TakeIdJwt.GetUserIdFromToken(token)), request);
+        var response = await HttpResponseHandler.PutAsync<ResponsePostProduct>(http, ServicesURL.Product("update", id, TakeIdJwt.GetUserIdFromToken(token)), request);
         if (response == null)
-            return BadRequest("");
+            return BadRequest(ResourceExceptionsProducts.PRODUTO_NAO_ENCONTRADO);
 
         return Ok(response);
     }
@@ -101,14 +98,13 @@ public class ProductController : ControllerBase
     [HttpDelete]
     [Route("Delete")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Delete(
-        [FromServices] HttpClient http,
         [FromHeader] int id)
     {
         var response = await HttpResponseHandler.DeleteAsync(http, ServicesURL.Product("delete", id));
         if (response == null)
-            return BadRequest();
+            return BadRequest(ResourceExceptionsProducts.PRODUTO_NAO_ENCONTRADO);
 
         return Ok();
     }

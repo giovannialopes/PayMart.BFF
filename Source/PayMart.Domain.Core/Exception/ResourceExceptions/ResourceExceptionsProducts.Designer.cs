@@ -68,5 +68,14 @@ namespace PayMart.Domain.Core.Exception.ResourceExceptions {
                 return ResourceManager.GetString("CARRINHO_VAZIO", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O produto não foi encontrado..
+        /// </summary>
+        public static string PRODUTO_NAO_ENCONTRADO {
+            get {
+                return ResourceManager.GetString("PRODUTO_NAO_ENCONTRADO", resourceCulture);
+            }
+        }
     }
 }

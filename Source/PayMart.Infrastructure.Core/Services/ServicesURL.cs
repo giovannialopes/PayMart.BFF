@@ -53,7 +53,7 @@ public static class ServicesURL
         if (Url == "post")
             ProductUrl = "https://localhost:5002/api/Product/post" + $"/{Config}";
 
-        if (Url == "postRestart")
+        if (Url == "restartProduct")
             ProductUrl = "https://localhost:5002/api/Product/restartProduct";
 
         if (Url == "getSumProducts")
