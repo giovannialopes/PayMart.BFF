@@ -1,11 +1,6 @@
-﻿using PayMart.Domain.Core.Request.Login;
-using PayMart.Domain.Core.Response.Login;
-using System;
-using System.Collections.Generic;
+﻿using PayMart.Domain.Core.Model;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static PayMart.Domain.Core.Model.ModelLogin;
 
 namespace PayMart.API.Core.Utilities;
 
@@ -20,18 +15,18 @@ public static class TakeIdJwt
         if (jwtToken != null)
         {
             var nameidClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "nameid");
-            return nameidClaim.Value;
+            return nameidClaim!.Value;
         }
         return "";
     }
 
-    public static RequestRegisterUserLogin GetAllFromToken(string token)
+    public static ModelLogin.RequestUserLogin GetAllFromToken(string token)
     {
         var jwtToken = new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
 
         if (jwtToken != null)
         {
-            var request = new RequestRegisterUserLogin();
+            var request = new RequestUserLogin();
 
             foreach (var claim in jwtToken.Claims)
             {
@@ -40,15 +35,12 @@ public static class TakeIdJwt
                     case "email":
                         request.Email = claim.Value;
                         break;
-                    case "unique_name":
-                        request.Name = claim.Value;
-                        break;
                 }
             }   
             return request;
         }
 
-        return new RequestRegisterUserLogin();
+        return new RequestUserLogin();
     }
 
         

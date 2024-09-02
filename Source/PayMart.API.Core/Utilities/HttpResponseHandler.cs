@@ -4,6 +4,8 @@ namespace PayMart.API.Core.Utilities;
 
 public class HttpResponseHandler
 {
+
+
     public static async Task<T?> HandleResponseAsync<T>(HttpResponseMessage httpResponse) where T : class, new()
     {
         var responseContent = await httpResponse.Content.ReadAsStringAsync();
@@ -36,8 +38,7 @@ public class HttpResponseHandler
 
         if (responseContent != "")
             return "Ok";
-    
+
         return default;
     }
-
 }

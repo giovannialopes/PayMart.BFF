@@ -53,12 +53,6 @@ public static class ServicesURL
         if (Url == "post")
             ProductUrl = "https://localhost:5002/api/Product/post" + $"/{Config}";
 
-        if (Url == "restartProduct")
-            ProductUrl = "https://localhost:5002/api/Product/restartProduct";
-
-        if (Url == "getSumProducts")
-            ProductUrl = "https://localhost:5002/api/Product/getSumProducts" + $"/{Config}";
-
         if (Url == "update")
             ProductUrl = "https://localhost:5002/api/Product/update" + $"/{Config}" + $"/{userID}";
 
@@ -88,10 +82,17 @@ public static class ServicesURL
         return OrderUrl;
     }
 
-    public static string Payment(string Url, object Config = null, object projectID = null)
+    public static string Payment(string Url,object Config = null, object userID = null)
     {
+
+        if (Url == "getAll")
+            PaymentUrl = "https://localhost:5004/api/Payment/getAll";
+
+        if (Url == "getID")
+            PaymentUrl = "https://localhost:5004/api/Payment/getID" + $"/{Config}";
+
         if (Url == "post")
-            PaymentUrl = "https://localhost:5004/api/Payment/post" + $"/{Config}" + $"/{projectID}";
+            PaymentUrl = "https://localhost:5004/api/Payment/post" + $"/{Config}" + $"/{userID}";
 
         return PaymentUrl;
     }

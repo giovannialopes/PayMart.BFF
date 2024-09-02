@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PayMart.API.Core.Utilities;
-using PayMart.Domain.Core.Exception.ResourceExceptions;
-using PayMart.Domain.Core.Request.Login;
-using PayMart.Domain.Core.Response.Login;
+using PayMart.Domain.Core.Model;
 using PayMart.Infrastructure.Core.Services;
 
 namespace PayMart.API.Core.Controllers.Login;
@@ -16,15 +14,18 @@ public class LoginController(HttpClient httpClient) : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetUser(
-        [FromBody] RequestGetUserLogin request)
+        [FromBody] ModelLogin.RequestUserLogin request)
     {
-        var response = await HttpResponseHandler.PostAsync<ResponsePostLogin>(httpClient, ServicesURL.Login("getUser"), request);
+        var httpResponse = await httpClient.PostAsJsonAsync(ServicesURL.Login("getUser"), request);
+        var (response, errorMessage) = await Http.HandleResponse<ModelLogin.ResponsePostLogin>(httpResponse);
 
-        if (response == null)
-            return BadRequest(ResourceExceptionsLogin.ERRO_USUARIO_NAO_ENCONTRADO);
+        if (response != null)
+        {
+            SaveResponse.SaveUserToken(response.Token);
+            return Ok(response);
+        }
 
-        SaveResponse.SaveUserToken(response.Token);
-        return Ok(response);
+        return BadRequest(errorMessage);
     }
 
     [HttpPost]
@@ -32,12 +33,31 @@ public class LoginController(HttpClient httpClient) : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RegisterUser(
-        [FromBody] RequestRegisterUserLogin request)
+        [FromBody] ModelLogin.RequestUserLogin request)
     {
-        var response = await HttpResponseHandler.PostAsync<ResponsePostLogin>(httpClient, ServicesURL.Login("registerUser"), request);
-        if (response == null)
-            return BadRequest(ResourceExceptionsLogin.ERRO_EMAIL_EXISTENTE);
+        var httpResponse = await httpClient.PostAsJsonAsync(ServicesURL.Login("registerUser"), request);
+        var (response, errorMessage) = await Http.HandleResponse<ModelLogin.ResponsePostLogin>(httpResponse);
 
-        return Created("", ResourceExceptionsLogin.CRIACAO_DE_USUARIO);
+        if (response != null)
+            return Created("", response);
+
+        return BadRequest(errorMessage);
     }
+
+    [HttpDelete]
+    [Route("Delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Delete(
+        [FromHeader] int id)
+    {
+        var httpResponse = await httpClient.DeleteAsync(ServicesURL.Login("delete", id));
+        var (response, errorMessage) = await Http.HandleResponse<ModelLogin.ResponsePostLogin>(httpResponse);
+
+        if (response != null)
+            return Ok(response);
+
+        return BadRequest(errorMessage);
+    }
+
 }

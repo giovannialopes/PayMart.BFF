@@ -61,6 +61,24 @@ namespace PayMart.Domain.Core.Exception.ResourceExceptions {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Faça um pedido primeiro antes de seguir com o pagamento..
+        /// </summary>
+        public static string ERRO_CONSULTAR_ORDER {
+            get {
+                return ResourceManager.GetString("ERRO_CONSULTAR_ORDER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Faça a consulta do preço dos pedidos para seguir com o pagamento..
+        /// </summary>
+        public static string ERRO_CONSULTAR_PRICE {
+            get {
+                return ResourceManager.GetString("ERRO_CONSULTAR_PRICE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Pagamento Inválido..
         /// </summary>
         public static string ERRO_PAGAMENTO_INVALIDO {

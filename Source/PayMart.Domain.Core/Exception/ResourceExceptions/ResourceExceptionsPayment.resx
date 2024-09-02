@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ERRO_CONSULTAR_ORDER" xml:space="preserve">
+    <value>Faça um pedido primeiro antes de seguir com o pagamento.</value>
+  </data>
+  <data name="ERRO_CONSULTAR_PRICE" xml:space="preserve">
+    <value>Faça a consulta do preço dos pedidos para seguir com o pagamento.</value>
+  </data>
   <data name="ERRO_PAGAMENTO_INVALIDO" xml:space="preserve">
     <value>Pagamento Inválido.</value>
   </data>

@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PayMart.API.Core.Utilities;
-using PayMart.Domain.Core.Exception.ResourceExceptions;
-using PayMart.Domain.Core.NovaPasta.NovaPasta;
-using PayMart.Domain.Core.Request.Client;
+using PayMart.Domain.Core.Model;
 using PayMart.Infrastructure.Core.Services;
+using static PayMart.API.Core.Utilities.JsonFormatter;
 
 namespace PayMart.API.Core.Controllers.Clients;
 
-[Route("api/[Controller]")]
+[Route("api/[controller]")]
 [ApiController]
 [Authorize]
 public class ClientController(HttpClient httpClient) : ControllerBase
@@ -21,13 +20,13 @@ public class ClientController(HttpClient httpClient) : ControllerBase
     {
         var httpResponse = await httpClient.GetStringAsync(ServicesURL.Client("getAll"));
 
-        if (string.IsNullOrEmpty(httpResponse) == false)
+        if (httpResponse.Contains("{"))
         {
-            var a = JsonFormatter.Formatter(httpResponse);
-            return Ok(a);
+            var responseJson = FormatterClient.FormatterGetAll(httpResponse);
+            return Ok(responseJson);
         }
 
-        return BadRequest(ResourceExceptionsClient.ERRO_NAO_POSSUI_CLIENTE);
+        return BadRequest(httpResponse);
     }
 
     [HttpGet]
@@ -36,31 +35,17 @@ public class ClientController(HttpClient httpClient) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetIDClient(
         [FromHeader] int id)
-        {
+    {
         var httpResponse = await httpClient.GetStringAsync(ServicesURL.Client("getID", id));
 
-        if (string.IsNullOrEmpty(httpResponse) == false)
+        if (httpResponse.Contains("{"))
         {
-            return Ok(JsonFormatter.Formatter(httpResponse));
+            var responseJson = FormatterClient.FormatterGetByID(httpResponse);
+            return Ok(responseJson);
         }
 
-        return BadRequest(ResourceExceptionsClient.ERRO_NAO_POSSUI_CLIENTE);
+        return BadRequest(httpResponse);
 
-    }
-
-    [HttpPost]
-    [Route("Post")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> PostClient(
-        [FromBody] RequestPostClient request)
-    {
-        string Token = SaveResponse.GetUserToken();
-        var response = await HttpResponseHandler.PostAsync<ResponsePostClient>(httpClient, ServicesURL.Client("post", TakeIdJwt.GetUserIdFromToken(Token)), request);
-        if (response == null)
-            return BadRequest(ResourceExceptionsClient.ERRO_EMAIL_REGISTRADO);
-
-        return Created("", response);
     }
 
     [HttpPut]
@@ -68,14 +53,16 @@ public class ClientController(HttpClient httpClient) : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateClient(int id,
-        [FromBody] RequestPostClient request)
+        [FromBody] ModelClient.ClientRequest request)
     {
-        string token = SaveResponse.GetUserToken();
-        var response = await HttpResponseHandler.PutAsync<ResponsePostClient>(httpClient, ServicesURL.Client("update", id, TakeIdJwt.GetUserIdFromToken(token)), request);
-        if (response == null)
-            return BadRequest(ResourceExceptionsClient.ERRO_EMAIL_REGISTRADO);
+        string Token = SaveResponse.GetUserToken();
+        var httpResponse = await httpClient.PutAsJsonAsync(ServicesURL.Client("update", id , TakeIdJwt.GetUserIdFromToken(Token)), request);
+        var (response, errorMessage) = await Http.HandleResponse<ModelClient.ClientResponse>(httpResponse);
 
-        return Ok(response);
+        if (response != null)
+            return Ok(response);
+
+        return BadRequest(errorMessage);
     }
 
     [HttpDelete]
@@ -85,11 +72,13 @@ public class ClientController(HttpClient httpClient) : ControllerBase
     public async Task<IActionResult> Delete(
         [FromHeader] int id)
     {
-        var response = await HttpResponseHandler.DeleteAsync(httpClient, ServicesURL.Login("delete", id));
-        if (response == null)
-            return BadRequest(ResourceExceptionsClient.ERRO_NAO_POSSUI_CLIENTE);
+        var httpResponse = await httpClient.DeleteAsync(ServicesURL.Client("delete", id));
+        var (response, errorMessage) = await Http.HandleResponse<ModelClient.ClientResponse>(httpResponse);
 
-        return Ok();
+        if (response != null)
+            return Ok(response);
+
+        return BadRequest(errorMessage);
 
     }
 

@@ -1,18 +1,21 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PayMart.API.Core.Utilities;
 using PayMart.Domain.Core.Exception.ResourceExceptions;
-using PayMart.Domain.Core.Request.Order;
-using PayMart.Domain.Core.Response.Order;
+using PayMart.Domain.Core.Model;
 using PayMart.Infrastructure.Core.Services;
+using System.Net.Http;
+using static PayMart.API.Core.Utilities.JsonFormatter;
 
 namespace PayMart.API.Core.Controllers.Orders;
+
 
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
 
-public class OrdersController(HttpClient http) : ControllerBase
+public class OrdersController(HttpClient httpClient) : ControllerBase
 {
     [HttpGet]
     [Route("GetAll")]
@@ -20,14 +23,15 @@ public class OrdersController(HttpClient http) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAllOrder()
     {
-        var httpResponse = await http.GetStringAsync(ServicesURL.Order("getAll"));
+        var httpResponse = await httpClient.GetStringAsync(ServicesURL.Order("getAll"));
 
-        if (string.IsNullOrEmpty(httpResponse) == false)
+        if (httpResponse.Contains("{"))
         {
-            return Ok(JsonFormatter.Formatter(httpResponse));
+            var responseJson = FormatterOrder.FormatterGetAll(httpResponse);
+            return Ok(responseJson);
         }
 
-        return BadRequest(ResourceExceptionsOrder.ERRO_NAO_POSSUI_ORDER);
+        return BadRequest(httpResponse);
     }
 
     [HttpGet]
@@ -37,14 +41,15 @@ public class OrdersController(HttpClient http) : ControllerBase
     public async Task<IActionResult> GetIDOrder(
         [FromHeader] int id)
     {
-        var httpResponse = await http.GetStringAsync(ServicesURL.Order("getID", id));
+        var httpResponse = await httpClient.GetStringAsync(ServicesURL.Order("getID", id));
 
-        if (string.IsNullOrEmpty(httpResponse) == false)
+        if (httpResponse.Contains("{"))
         {
-            return Ok(JsonFormatter.Formatter(httpResponse));
+            var responseJson = FormatterOrder.FormatterGetByID(httpResponse);
+            return Ok(responseJson);
         }
 
-        return BadRequest(ResourceExceptionsOrder.ERRO_NAO_POSSUI_ORDER);
+        return BadRequest(httpResponse);
     }
 
     [HttpPost]
@@ -52,31 +57,16 @@ public class OrdersController(HttpClient http) : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> PostOrder(
-        [FromBody] RequestPostOrder request)
+        [FromBody] ModelOrder.OrderRequest request)
     {
         string Token = SaveResponse.GetUserToken();
-        var response = await HttpResponseHandler.PostAsync<ResponsePostOrder>(http, ServicesURL.Order("post", TakeIdJwt.GetUserIdFromToken(Token)), request);
-        if (response == null)
-            return BadRequest(ResourceExceptionsOrder.ERRO_PEDIDO_JA_CRIADO);
+        var httpResponse = await httpClient.PostAsJsonAsync(ServicesURL.Order("post", TakeIdJwt.GetUserIdFromToken(Token)), request);
+        var (response, errorMessage) = await Http.HandleResponse<ModelOrder.OrderResponse>(httpResponse);
 
-        SaveResponse.SaveOrderId(response.id);
-        return Created("", ResourceExceptionsOrder.PEDIDO_CRIADO.Replace("#name", $"{response.Name}"));
-    }
+        if (response != null)
+            return Created("", response);
 
-    [HttpPut]
-    [Route("Update")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateOrder(
-        [FromBody] RequestPostOrder request,
-        [FromHeader] int id)
-    {
-        string token = SaveResponse.GetUserToken();
-        var response = await HttpResponseHandler.PutAsync<ResponsePostOrder>(http, ServicesURL.Order("update", id, TakeIdJwt.GetUserIdFromToken(token)), request);
-        if (response == null)
-            return BadRequest(ResourceExceptionsOrder.ERRO_PEDIDO_JA_CRIADO);
-
-        return Ok(response);
+        return BadRequest(errorMessage);
     }
 
     [HttpDelete]
@@ -86,10 +76,12 @@ public class OrdersController(HttpClient http) : ControllerBase
     public async Task<IActionResult> DeleteOrder(
         [FromHeader] int id)
     {
-        var response = await HttpResponseHandler.DeleteAsync(http, ServicesURL.Order("delete", id));
-        if (response == null)
-            return BadRequest(ResourceExceptionsOrder.ERRO_NAO_POSSUI_ORDER);
+        var httpResponse = await httpClient.DeleteAsync(ServicesURL.Order("delete", id));
+        var (response, errorMessage) = await Http.HandleResponse<ModelOrder.OrderResponse>(httpResponse);
 
-        return Ok();
+        if (response != null)
+            return Ok(response);
+
+        return BadRequest(errorMessage);
     }
 }
