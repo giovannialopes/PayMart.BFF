@@ -41,7 +41,6 @@ Antes de iniciar o projeto, certifique-se de que você tem as seguintes ferramen
 - [.NET Core 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [SQL Server](https://www.microsoft.com/pt-br/sql-server/sql-server-downloads)
 - [Git](https://git-scm.com/)
-- [Docker](https://www.docker.com/) (opcional)
 
 ## Configuração
 
