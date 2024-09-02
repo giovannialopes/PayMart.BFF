@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PayMart.API.Core.Utilities;
-using PayMart.Domain.Core.Exception.ResourceExceptions;
 using PayMart.Domain.Core.Model;
 using PayMart.Infrastructure.Core.Services;
-using System.Net.Http;
 using static PayMart.API.Core.Utilities.JsonFormatter;
 
 namespace PayMart.API.Core.Controllers.Orders;
