@@ -4,6 +4,7 @@ using PayMart.API.Core.Utilities;
 using PayMart.Domain.Core.Model;
 using PayMart.Infrastructure.Core.Services;
 using static PayMart.API.Core.Utilities.JsonFormatter;
+using static PayMart.Infrastructure.Core.Services.ServicesURL;
 
 namespace PayMart.API.Core.Controllers.Products;
 
@@ -19,7 +20,7 @@ public class ProductController(HttpClient httpClient) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAllProduct()
     {
-        var httpResponse = await httpClient.GetStringAsync(ServicesURL.Product("getAll"));
+        var httpResponse = await httpClient.GetStringAsync(ServicesURL.GetProductUrl(UrlType.GetAll));
 
         if (httpResponse.Contains("{"))
         {
@@ -37,7 +38,7 @@ public class ProductController(HttpClient httpClient) : ControllerBase
     public async Task<IActionResult> GetIDProduct(
         [FromHeader] int id)
     {
-        var httpResponse = await httpClient.GetStringAsync(ServicesURL.Product("getID", id));
+        var httpResponse = await httpClient.GetStringAsync(ServicesURL.GetProductUrl(UrlType.GetID, id));
 
         if (httpResponse.Contains("{"))
         {
@@ -57,7 +58,7 @@ public class ProductController(HttpClient httpClient) : ControllerBase
         [FromBody] ModelProduct.ProductRequest request)
     {
         string Token = SaveResponse.GetUserToken();
-        var httpResponse = await httpClient.PostAsJsonAsync(ServicesURL.Product("post", TakeIdJwt.GetUserIdFromToken(Token)), request);
+        var httpResponse = await httpClient.PostAsJsonAsync(ServicesURL.GetProductUrl(UrlType.Post, TakeIdJwt.GetUserIdFromToken(Token)), request);
         var (response, errorMessage) = await Http.HandleResponse<ModelProduct.ProductResponse>(httpResponse);
 
         if (response != null)
@@ -75,7 +76,7 @@ public class ProductController(HttpClient httpClient) : ControllerBase
         [FromHeader] int id)
     {
         string Token = SaveResponse.GetUserToken();
-        var httpResponse = await httpClient.PutAsJsonAsync(ServicesURL.Product("update", id, TakeIdJwt.GetUserIdFromToken(Token)), request);
+        var httpResponse = await httpClient.PutAsJsonAsync(ServicesURL.GetProductUrl(UrlType.Update, id, TakeIdJwt.GetUserIdFromToken(Token)), request);
         var (response, errorMessage) = await Http.HandleResponse<ModelProduct.ProductResponse>(httpResponse);
 
         if (response != null)
@@ -91,7 +92,7 @@ public class ProductController(HttpClient httpClient) : ControllerBase
     public async Task<IActionResult> DeleteProduct(
         [FromHeader] int id)
     {
-        var httpResponse = await httpClient.DeleteAsync(ServicesURL.Product("delete", id));
+        var httpResponse = await httpClient.DeleteAsync(ServicesURL.GetProductUrl(UrlType.Delete, id));
         var (response, errorMessage) = await Http.HandleResponse<ModelProduct.ProductResponse>(httpResponse);
 
         if (response != null)

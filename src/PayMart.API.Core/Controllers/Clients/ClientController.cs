@@ -4,6 +4,7 @@ using PayMart.API.Core.Utilities;
 using PayMart.Domain.Core.Model;
 using PayMart.Infrastructure.Core.Services;
 using static PayMart.API.Core.Utilities.JsonFormatter;
+using static PayMart.Infrastructure.Core.Services.ServicesURL;
 
 namespace PayMart.API.Core.Controllers.Clients;
 
@@ -18,7 +19,7 @@ public class ClientController(HttpClient httpClient) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAllClient()
     {
-        var httpResponse = await httpClient.GetStringAsync(ServicesURL.Client("getAll"));
+        var httpResponse = await httpClient.GetStringAsync(ServicesURL.GetClientUrl(UrlType.GetAll));
 
         if (httpResponse.Contains("{"))
         {
@@ -36,7 +37,7 @@ public class ClientController(HttpClient httpClient) : ControllerBase
     public async Task<IActionResult> GetIDClient(
         [FromHeader] int id)
     {
-        var httpResponse = await httpClient.GetStringAsync(ServicesURL.Client("getID", id));
+        var httpResponse = await httpClient.GetStringAsync(ServicesURL.GetClientUrl(UrlType.GetID, id));
 
         if (httpResponse.Contains("{"))
         {
@@ -56,7 +57,7 @@ public class ClientController(HttpClient httpClient) : ControllerBase
         [FromBody] ModelClient.ClientRequest request)
     {
         string Token = SaveResponse.GetUserToken();
-        var httpResponse = await httpClient.PutAsJsonAsync(ServicesURL.Client("update", id , TakeIdJwt.GetUserIdFromToken(Token)), request);
+        var httpResponse = await httpClient.PutAsJsonAsync(ServicesURL.GetClientUrl(UrlType.Update, id , TakeIdJwt.GetUserIdFromToken(Token)), request);
         var (response, errorMessage) = await Http.HandleResponse<ModelClient.ClientResponse>(httpResponse);
 
         if (response != null)
@@ -72,7 +73,7 @@ public class ClientController(HttpClient httpClient) : ControllerBase
     public async Task<IActionResult> Delete(
         [FromHeader] int id)
     {
-        var httpResponse = await httpClient.DeleteAsync(ServicesURL.Client("delete", id));
+        var httpResponse = await httpClient.DeleteAsync(ServicesURL.GetClientUrl(UrlType.Delete, id));
         var (response, errorMessage) = await Http.HandleResponse<ModelClient.ClientResponse>(httpResponse);
 
         if (response != null)

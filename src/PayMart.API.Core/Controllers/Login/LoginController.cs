@@ -2,6 +2,7 @@
 using PayMart.API.Core.Utilities;
 using PayMart.Domain.Core.Model;
 using PayMart.Infrastructure.Core.Services;
+using static PayMart.Infrastructure.Core.Services.ServicesURL;
 
 namespace PayMart.API.Core.Controllers.Login;
 
@@ -16,7 +17,7 @@ public class LoginController(HttpClient httpClient) : ControllerBase
     public async Task<IActionResult> GetUser(
         [FromBody] ModelLogin.RequestUserLogin request)
     {
-        var httpResponse = await httpClient.PostAsJsonAsync(ServicesURL.Login("getUser"), request);
+        var httpResponse = await httpClient.PostAsJsonAsync(ServicesURL.GetLoginUrl(UrlType.GetUser), request);
         var (response, errorMessage) = await Http.HandleResponse<ModelLogin.ResponsePostLogin>(httpResponse);
 
         if (response != null)
@@ -35,7 +36,7 @@ public class LoginController(HttpClient httpClient) : ControllerBase
     public async Task<IActionResult> RegisterUser(
         [FromBody] ModelLogin.RequestUserLogin request)
     {
-        var httpResponse = await httpClient.PostAsJsonAsync(ServicesURL.Login("registerUser"), request);
+        var httpResponse = await httpClient.PostAsJsonAsync(ServicesURL.GetLoginUrl(UrlType.RegisterUser), request);
         var (response, errorMessage) = await Http.HandleResponse<ModelLogin.ResponsePostLogin>(httpResponse);
 
         if (response != null)
@@ -51,7 +52,7 @@ public class LoginController(HttpClient httpClient) : ControllerBase
     public async Task<IActionResult> Delete(
         [FromHeader] int id)
     {
-        var httpResponse = await httpClient.DeleteAsync(ServicesURL.Login("delete", id));
+        var httpResponse = await httpClient.DeleteAsync(ServicesURL.GetLoginUrl(UrlType.Delete, id));
         var (response, errorMessage) = await Http.HandleResponse<ModelLogin.ResponsePostLogin>(httpResponse);
 
         if (response != null)

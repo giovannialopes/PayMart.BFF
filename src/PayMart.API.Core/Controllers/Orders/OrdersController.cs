@@ -4,6 +4,7 @@ using PayMart.API.Core.Utilities;
 using PayMart.Domain.Core.Model;
 using PayMart.Infrastructure.Core.Services;
 using static PayMart.API.Core.Utilities.JsonFormatter;
+using static PayMart.Infrastructure.Core.Services.ServicesURL;
 
 namespace PayMart.API.Core.Controllers.Orders;
 
@@ -20,7 +21,7 @@ public class OrdersController(HttpClient httpClient) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAllOrder()
     {
-        var httpResponse = await httpClient.GetStringAsync(ServicesURL.Order("getAll"));
+        var httpResponse = await httpClient.GetStringAsync(ServicesURL.GetOrderUrl(UrlType.GetAll));
 
         if (httpResponse.Contains("{"))
         {
@@ -38,7 +39,7 @@ public class OrdersController(HttpClient httpClient) : ControllerBase
     public async Task<IActionResult> GetIDOrder(
         [FromHeader] int id)
     {
-        var httpResponse = await httpClient.GetStringAsync(ServicesURL.Order("getID", id));
+        var httpResponse = await httpClient.GetStringAsync(ServicesURL.GetOrderUrl(UrlType.GetID, id));
 
         if (httpResponse.Contains("{"))
         {
@@ -57,7 +58,7 @@ public class OrdersController(HttpClient httpClient) : ControllerBase
         [FromBody] ModelOrder.OrderRequest request)
     {
         string Token = SaveResponse.GetUserToken();
-        var httpResponse = await httpClient.PostAsJsonAsync(ServicesURL.Order("post", TakeIdJwt.GetUserIdFromToken(Token)), request);
+        var httpResponse = await httpClient.PostAsJsonAsync(ServicesURL.GetOrderUrl(UrlType.Post, TakeIdJwt.GetUserIdFromToken(Token)), request);
         var (response, errorMessage) = await Http.HandleResponse<ModelOrder.OrderResponse>(httpResponse);
 
         if (response != null)
@@ -73,7 +74,7 @@ public class OrdersController(HttpClient httpClient) : ControllerBase
     public async Task<IActionResult> DeleteOrder(
         [FromHeader] int id)
     {
-        var httpResponse = await httpClient.DeleteAsync(ServicesURL.Order("delete", id));
+        var httpResponse = await httpClient.DeleteAsync(ServicesURL.GetOrderUrl(UrlType.Delete, id));
         var (response, errorMessage) = await Http.HandleResponse<ModelOrder.OrderResponse>(httpResponse);
 
         if (response != null)
