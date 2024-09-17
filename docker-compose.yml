@@ -1,0 +1,113 @@
+version: '3.8'
+
+services:
+  paymart-bff:
+    container_name: 1-BFF
+    image: paymart-bff
+    build:
+      context: ./PayMart.Core/src
+      dockerfile: PayMart.API.Core/Dockerfile
+    ports:
+      - "4999:4999"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    depends_on:
+      - paymart-login
+      - paymart-clients
+      - paymart-products
+      - paymart-orders
+      - paymart-payments
+
+
+  paymart-login:
+    container_name: 2-Login
+    image: paymart-login
+    build:
+      context: ./PayMart.Login/src
+      dockerfile: PayMart.API.Login/Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=PayMart.Login.db;User=sa;Password=Str0ngP@ssw0rd123!;TrustServerCertificate=True;
+    depends_on:
+      - sqlserver
+      - paymart-clients
+
+
+  paymart-clients:
+    container_name: 3-Client
+    image: paymart-clients
+    build:
+      context: ./PayMart.Clients/src
+      dockerfile: PayMart.API.Clients/Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=PayMart.Clients.db;User=sa;Password=Str0ngP@ssw0rd123!;TrustServerCertificate=True;
+    depends_on:
+      - sqlserver
+
+
+  paymart-products:
+    container_name: 4-Product
+    image: paymart-products
+    build:
+      context: ./PayMart.Products/src
+      dockerfile: PayMart.API.Products/Dockerfile
+    ports:
+      - "5002:5002"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=PayMart.Products.db;User=sa;Password=Str0ngP@ssw0rd123!;TrustServerCertificate=True;
+    depends_on:
+      - sqlserver
+
+
+  paymart-orders:
+    container_name: 5-Order
+    image: paymart-orders
+    build:
+      context: ./PayMart.Orders/src
+      dockerfile: PayMart.API.Orders/Dockerfile
+    ports:
+      - "5003:5003"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=PayMart.Orders.db;User=sa;Password=Str0ngP@ssw0rd123!;TrustServerCertificate=True;
+    depends_on:
+      - sqlserver
+      - paymart-products
+      
+      
+  paymart-payments:
+    container_name: 6-Payment
+    image: paymart-payments
+    build:
+      context: ./PayMart.Payments/src
+      dockerfile: PayMart.API.Payments/Dockerfile
+    ports:
+      - "5004:5004"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=PayMart.Payments.db;User=sa;Password=Str0ngP@ssw0rd123!;TrustServerCertificate=True;
+    depends_on:
+      - sqlserver
+      - paymart-orders
+
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: 7-SQL
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Str0ngP@ssw0rd123!
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlvolume:/var/opt/mssql
+   
+
+volumes:
+  sqlvolume:
