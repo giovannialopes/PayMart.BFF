@@ -20,9 +20,8 @@ Certifique-se de que todas essas APIs estejam rodando corretamente antes de inic
 
 ## Futuras Funcionalidades
 
-No futuro, planejo incluir as seguintes funcionalidades no projeto:
+O projeto está em desenvolvimento contínuo, e as seguintes funcionalidades estão planejadas para futuras implementações:
 
-- **Docker**: Suporte para execução do projeto em containers Docker, facilitando o deploy e a escalabilidade.
 - **Criação de Testes Unitários**: Implementação de testes unitários para garantir a qualidade e a estabilidade do código.
 - **RabbitMQ**: Integração com RabbitMQ para gerenciamento de filas e comunicação assíncrona entre microserviços.
 
@@ -40,34 +39,39 @@ Antes de iniciar o projeto, certifique-se de que você tem as seguintes ferramen
 
 - [.NET Core 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [SQL Server](https://www.microsoft.com/pt-br/sql-server/sql-server-downloads)
+- [Docker](https://www.docker.com/)
 - [Git](https://git-scm.com/)
 
-## Configuração
+## Configuração do Projeto
 
-1. Clone este repositório:
+### 0. Após fazer o download de todos os projetos, jogue o arquivo docker-compose.yml para a pasta PayMart que contempla todos os outros microserviços.
 
-    ```bash
-    git clone https://github.com/seuusuario/PayMart.BFF.git
-    ```
+### 1. Clonar o Repositório
 
-2. Navegue até a pasta do projeto:
+```bash
+git clone https://github.com/seuusuario/PayMart.BFF.git
+```
 
-    ```bash
-    cd PayMart.BFF
-    ```
+### 2. Navegar até a Pasta do Projeto onde está TODAS as aplicações
 
-3. Restaure as dependências e compile o projeto:
+```bash
+cd PayMart
+```
 
-    ```bash
-    dotnet restore
-    dotnet build
-    ```
+### 3. Configuração com Docker
 
-4. Execute o projeto:
+O projeto já está configurado para rodar com Docker. Siga os passos abaixo para garantir que o ambiente esteja pronto:
+    1- Certifique-se de que o Docker está em execução.
+    2- Utilize o comando abaixo para construir e rodar os containers:
 
-    ```bash
-    dotnet run
-    ```
+```bash
+docker-compose up --build
+```
+Este comando criará os containers e iniciará a aplicação junto com os serviços necessários.
+
+### 5. Configuração do Banco de Dados
+
+Lembre-se de alterar o caminho do banco de dados no arquivo appsettings.json de cada aplicação antes de iniciar o sistema. Certifique-se de que as configurações de conexão estejam corretas para o seu ambiente.
 
 ## Contribuições
 
