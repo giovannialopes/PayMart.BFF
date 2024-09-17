@@ -14,6 +14,13 @@ public class ModelProduct
         public int Status { get; set; }
     }
 
+    public class ProductRequestUpdate
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public int StockQuantity { get; set; }
+        public decimal Price { get; set; }
+    }
 
     public class ProductResponse
     {

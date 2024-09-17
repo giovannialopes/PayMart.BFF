@@ -61,6 +61,8 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 
+var secretKey = builder.Configuration["JwtSettings:SecretKey"];
+
 builder.Services.AddAuthentication(config =>
 {
     config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -72,7 +74,7 @@ builder.Services.AddAuthentication(config =>
         ValidateIssuer = false,
         ValidateAudience = false,
         ClockSkew = new TimeSpan(0),
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("yw~X2£*ka7\\QF4&V8d|2OLw;m,zAGzON"))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!))
     };
 });
 

@@ -72,7 +72,7 @@ public class ProductController(HttpClient httpClient) : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateProduct(
-        [FromBody] ModelProduct.ProductRequest request,
+        [FromBody] ModelProduct.ProductRequestUpdate request,
         [FromHeader] int id)
     {
         string Token = SaveResponse.GetUserToken();
